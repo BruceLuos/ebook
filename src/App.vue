@@ -5,14 +5,11 @@
 </template>
 
 <script>
-import './store/getters.js'
+
 export default {
-  mounted () {
-    this.$store.dispatch('setFileName').then(() => {
-      console.log(this.$store.state.Book.test)
-    })
-  }
+
 }
+// 根据页面宽度计算fontsize
 document.addEventListener('DOMContentLoaded', () => {
   const html = document.querySelector('html')
   let fontSize = window.innerWidth / 10

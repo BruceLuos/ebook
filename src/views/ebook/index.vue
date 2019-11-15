@@ -7,7 +7,7 @@
 <script>
 import EbookReader from '../../components/ebook/EbookReader'
 export default {
-  components:{
+  components: {
     EbookReader
   }
 }
