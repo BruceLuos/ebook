@@ -1,14 +1,14 @@
 <template>
   <div id="app">
-    <span class="text">Abcd</span>
     <router-view/>
   </div>
 </template>
 
 <script>
+import './store/getters.js'
 export default {
   mounted () {
-    this.$store.dispatch('setTest',9).then(() => {
+    this.$store.dispatch('setFileName').then(() => {
       console.log(this.$store.state.Book.test)
     })
   }
@@ -22,9 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 </script>
 <style lang="scss" scoped>
-@import "./assets/styles/global.scss";
-.text{
-  font-size: px2rem(40);
-  font-family: 'Days One';
+#app {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 </style>

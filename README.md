@@ -51,5 +51,14 @@ px/页面宽度/10 +rem
 mginx静态资源配置
 需要在英文路径中运行nginx
 nginx.conf配置新的server
-
+server {
+	listen   9090;
+	server_name   resource;
+	root D:/Schoolwork/jsplearning/ebook/resource;
+	autoindex on;
+	location / {
+		add_header Access-Control-Allow-Origin *;
+	}
+	add_header Cache-Control "no-cache, must-revalidate";
+    }
  -->
