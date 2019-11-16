@@ -61,4 +61,11 @@ server {
 	}
 	add_header Cache-Control "no-cache, must-revalidate";
     }
+阅读器
+新建vue组件作为阅读器的展示,路由地址为nginx中resource地址与epub地址拼接作为子组件的路由地址,解析
+拼接地址并进行书籍的渲染和展示
+
+阅读器的翻页
+阅读器是通过iframe来实现
+epub中提供了on方法可以监听iframe里面的事件,我们需要监听touchstart和touchend这两个事件来获取手势滑动的距离clienx和时间timestamp
  -->
