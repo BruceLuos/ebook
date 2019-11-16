@@ -7,6 +7,7 @@
 <script>
 // import { mapGetters } from 'vuex'
 import { ebookMixin } from '../../utils/mixin'
+// import { mapActions } from 'vuex'
 import Epub from 'epubjs'
 global.ePub = Epub
 export default {
@@ -16,6 +17,7 @@ export default {
     // ...mapGetters(['fileName','menuVisible'])
   },
   methods: {
+    // ...mapActions(['setMenuVisible']),
     // 前一页
      prevPage () {
        if (this.rendition) {
@@ -32,14 +34,16 @@ export default {
     },
     // 标题和菜单的显示
     toggleTitleAndMenu () {
-      this.$store.dispatch('setMenuVisible', !this.menuVisible )
+      this.setMenuVisible(!this.menuVisible)
     },
     // 标题和菜单的显示
     hideTitleAndMenu () {
-      this.$store.dispatch('setMenuVisible', false)
+      // this.$store.dispatch('setMenuVisible', false)
+      this.setMenuVisible(false)
     },
     // 合并电子书url并解析渲染电子书
     initEpub () {
+      // http://localhost:8080/#/ebook/Biomedicine|2014_Book_Self-ReportedPopulationHealthA
       const url = 'http://192.168.1.105:9090/epub/' + this.fileName + '.epub'
       console.log(url)
       // 解析获取book
@@ -82,9 +86,12 @@ export default {
     const fileName = this.$route.params.fileName.split('|').join('/')
     // console.log(fileName)
     // 分发fileName在vuex中修改
-    this.$store.dispatch('setFileName', fileName).then(() => {
+    this.setFileName(fileName).then(() => {
       this.initEpub()
     })
+    // this.$store.dispatch('setFileName', fileName).then(() => {
+    //   this.initEpub()
+    // })
   }
 }
 </script>

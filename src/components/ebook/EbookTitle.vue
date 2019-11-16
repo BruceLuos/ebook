@@ -28,7 +28,7 @@
       // ...mapGetters(['menuVisible'])
     },
     methods: {
-      back() {
+      back () {
         console.log('back')
       }
     }

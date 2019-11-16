@@ -90,4 +90,6 @@ export const ebookMixin = {
 在组件中
 import {ebookmixin} from '../../utils/mixin
 mixin:[ebookmixin]
+
+使用mapaction减少代码,也把这部分内容加入mixin中
  -->
