@@ -71,4 +71,7 @@ epub中提供了on方法可以监听iframe里面的事件,我们需要监听touc
 
 阅读器标题
 用户点击页面时显示，在ebookreader中执行toggletitleandmenu方法通过vuex中的menuvisible属性来显示
+
+阅读器底部菜单栏
+跟标题的做法基本一样
  -->

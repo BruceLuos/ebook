@@ -18,17 +18,23 @@ export default {
      prevPage () {
        if (this.rendition) {
            this.rendition.prev()
+           this.hideTitleAndMenu()
        }
      },
     //  下一页
     nextPage () {
       if (this.rendition) {
           this.rendition.next()
+          this.hideTitleAndMenu()
       }
     },
     // 标题和菜单的显示
     toggleTitleAndMenu () {
       this.$store.dispatch('setMenuVisible', !this.menuVisible )
+    },
+    // 标题和菜单的显示
+    hideTitleAndMenu () {
+      this.$store.dispatch('setMenuVisible', false)
     },
     // 合并电子书url并解析渲染电子书
     initEpub () {
@@ -46,7 +52,7 @@ export default {
       this.rendition.display()
       // 翻页(计算手势移动位移和时间间隔)
       this.rendition.on('touchstart', event => {
-       console.log(event)
+      //  console.log(event)
        this.touchStartX = event.changedTouches[0].clientX
        this.touchStartTime = event.timeStamp
      })
