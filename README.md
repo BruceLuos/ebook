@@ -92,4 +92,13 @@ import {ebookmixin} from '../../utils/mixin
 mixin:[ebookmixin]
 
 使用mapaction减少代码,也把这部分内容加入mixin中
+
+阅读器的字号和字体
+字号组件的显示与隐藏
+要求在底部菜单栏显示时才能显示
+设置字体大小范围，默认字体大小
+将book对象放在vuex中用以其他组件修改当前book的字体等属性
+在ebookSettingFont组件中修改字体大小
+this.book.rendition.thems.fontSize(fontSize + 'px') 注意要加px
+
  -->

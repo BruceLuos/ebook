@@ -34,12 +34,18 @@ export default {
     },
     // 标题和菜单的显示
     toggleTitleAndMenu () {
+      // 底部菜单栏显示的时候
+      if (this.menuVisible) {
+        this.setSettingVisible(-1)
+      }
       this.setMenuVisible(!this.menuVisible)
     },
     // 标题和菜单的显示
     hideTitleAndMenu () {
       // this.$store.dispatch('setMenuVisible', false)
       this.setMenuVisible(false)
+      // 字体面板隐藏
+      this.setSettingVisible(-1)
     },
     // 合并电子书url并解析渲染电子书
     initEpub () {
@@ -48,6 +54,8 @@ export default {
       console.log(url)
       // 解析获取book
       this.book = new Epub(url)
+      // 将book对象存放在vuex中
+      this.setCurrentBook(this.book)
       console.log(this.book)
       // 绑定dom read进行书籍的渲染
       this.rendition = this.book.renderTo('read', {
