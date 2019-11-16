@@ -17,6 +17,7 @@
       </div>
     </transition>
     <ebook-setting-font></ebook-setting-font>
+    <ebook-setting-font-popup></ebook-setting-font-popup>
   </div>
 </template>
 
@@ -24,9 +25,11 @@
 // import { mapGetters } from 'vuex'
 import { ebookMixin } from '../../utils/mixin'
 import EbookSettingFont from './EbookSettingFont'
+import EbookSettingFontPopup from './EbookSettingFontPopup'
   export default {
     components: {
-      EbookSettingFont
+      EbookSettingFont,
+      EbookSettingFontPopup
     },
     mixins: [ebookMixin],
     computed: {

@@ -17,6 +17,7 @@
         </div>
         <div class="preview" :style="{fontSize: fontSizeList[fontSizeList.length - 1].fontSize + 'px'}">A</div>
       </div>
+      <!-- 设置字体 -->
       <div class="setting-font-family" @click="showFontFamilyPopup">
         <div class="setting-font-family-text-wrapper">
           <span class="setting-font-family-text">{{defaultFontFamily}}</span>
@@ -44,12 +45,8 @@
     methods: {
       setFontSize (fontSize) {
         this.setDefaultFontSize(fontSize)
-        console.log(this.defaultFontSize)
         saveFontSize(this.fileName, fontSize)
-        console.log(this.currentBook)
         this.currentBook.rendition.themes.fontSize(fontSize + 'px')
-        console.log(this.currentBook.rendition.themes)
-        console.log(fontSize)
       },
       showFontFamilyPopup () {
         this.setFontFamilyVisible(true)

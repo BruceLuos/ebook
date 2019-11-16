@@ -101,4 +101,6 @@ mixin:[ebookmixin]
 在ebookSettingFont组件中修改字体大小
 this.book.rendition.thems.fontSize(fontSize + 'px') 注意要加px
 
+字体面板设置
+点击default字体设置弹窗
  -->
