@@ -11,19 +11,26 @@ global.ePub = Epub
 export default {
   computed: {
     // 这样就可以使用this.fileName来获取fileName
-    ...mapGetters(['fileName'])
+    ...mapGetters(['fileName','menuVisible'])
   },
   methods: {
+    // 前一页
      prevPage () {
        if (this.rendition) {
            this.rendition.prev()
        }
      },
+    //  下一页
     nextPage () {
       if (this.rendition) {
           this.rendition.next()
       }
     },
+    // 标题和菜单的显示
+    toggleTitleAndMenu () {
+      this.$store.dispatch('setMenuVisible', !this.menuVisible )
+    },
+    // 合并电子书url并解析渲染电子书
     initEpub () {
       const url = 'http://192.168.1.105:9090/epub/' + this.fileName + '.epub'
       console.log(url)
@@ -63,9 +70,10 @@ export default {
     }
   },
   mounted () {
-    // console.log(this.fileName)
+    // 拆分路由地址
     const fileName = this.$route.params.fileName.split('|').join('/')
-    console.log(fileName)
+    // console.log(fileName)
+    // 分发fileName在vuex中修改
     this.$store.dispatch('setFileName', fileName).then(() => {
       this.initEpub()
     })

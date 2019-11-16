@@ -68,4 +68,7 @@ server {
 阅读器的翻页
 阅读器是通过iframe来实现
 epub中提供了on方法可以监听iframe里面的事件,我们需要监听touchstart和touchend这两个事件来获取手势滑动的距离clienx和时间timestamp
+
+阅读器标题
+用户点击页面时显示，在ebookreader中执行toggletitleandmenu方法通过vuex中的menuvisible属性来显示
  -->
