@@ -5,13 +5,15 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+// import { mapGetters } from 'vuex'
+import { ebookMixin } from '../../utils/mixin'
 import Epub from 'epubjs'
 global.ePub = Epub
 export default {
+  mixins: [ebookMixin],
   computed: {
     // 这样就可以使用this.fileName来获取fileName
-    ...mapGetters(['fileName','menuVisible'])
+    // ...mapGetters(['fileName','menuVisible'])
   },
   methods: {
     // 前一页

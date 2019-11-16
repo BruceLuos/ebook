@@ -20,12 +20,12 @@
 </template>
 
 <script>
-  // import { ebookMixin } from '../../utils/mixin'
-  import { mapGetters } from 'vuex'
+  import { ebookMixin } from '../../utils/mixin'
+  // import { mapGetters } from 'vuex'
   export default {
-    // mixins: [ebookMixin],
+    mixins: [ebookMixin],
     computed: {
-      ...mapGetters(['menuVisible'])
+      // ...mapGetters(['menuVisible'])
     },
     methods: {
       back() {

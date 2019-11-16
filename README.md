@@ -74,4 +74,20 @@ epub中提供了on方法可以监听iframe里面的事件,我们需要监听touc
 
 阅读器底部菜单栏
 跟标题的做法基本一样
+阅读器底部菜单栏的显示和隐藏,以及添加翻页时标题和菜单栏隐藏的方法
+
+使用vue中的mixin将重复的vuex的代码整合
+将复用的vuex状态代码放进mixin中
+export const ebookMixin = {
+  computed: {
+    ...mapGetters([
+      'fileName',
+      'menuVisible'
+    ])
+  }
+}
+
+在组件中
+import {ebookmixin} from '../../utils/mixin
+mixin:[ebookmixin]
  -->
