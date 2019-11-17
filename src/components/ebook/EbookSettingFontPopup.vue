@@ -40,11 +40,13 @@ export default {
     // 设置字体
     setFontFamily (font) {
       this.setDefaultFontFamily(font)
+      console.log(font)
       if (font === 'Default') {
           this.currentBook.rendition.themes.font('Times New Roman')
         } else {
           this.currentBook.rendition.themes.font(font)
         }
+      this.setFontFamilyVisible(false)
     }
   },
 }

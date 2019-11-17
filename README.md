@@ -108,4 +108,6 @@ this.book.rendition.thems.fontSize(fontSize + 'px') 注意要加px
 选择字体后选中的那列显示高亮，并且EbookMenu组件中的设置按钮中的文字也发生变化
 选择字体后电子书的字体随之改变
 在菜单栏和标题栏关闭的时候，设置弹窗也关闭
+
+设置环境变量VUE_APP_RES_URL方便生产模式时url的管理
  -->

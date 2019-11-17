@@ -36,7 +36,10 @@ export default {
     toggleTitleAndMenu () {
       // 底部菜单栏显示的时候
       if (this.menuVisible) {
-        this.setSettingVisible(-1)
+        // 字体属性面板隐藏
+      this.setSettingVisible(-1)
+      // 字体设置面板隐藏
+      this.setFontFamilyVisible(false)
       }
       this.setMenuVisible(!this.menuVisible)
     },
@@ -44,8 +47,10 @@ export default {
     hideTitleAndMenu () {
       // this.$store.dispatch('setMenuVisible', false)
       this.setMenuVisible(false)
-      // 字体面板隐藏
+      // 字体属性面板隐藏
       this.setSettingVisible(-1)
+      // 字体设置面板隐藏
+      this.setFontFamilyVisible(false)
     },
     // 合并电子书url并解析渲染电子书
     initEpub () {
@@ -84,8 +89,22 @@ export default {
           } else {
             this.toggleTitleAndMenu()
           }
+          // 新版chrome会默认preventDefault是被动的所以会警告
           // event.preventDefault()
           event.stopPropagation()
+        })
+        // 加载不同的字体样式资源
+        // 通过hooks这个钩子函数
+        this.rendition.hooks.content.register( contents => {
+          // addStylesheet参数要求为一个url
+          // 所以我们需要把资源放在nginx上
+         Promise.all([
+            contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/daysOne.css`),
+            contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/cabin.css`),
+            contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/montserrat.css`),
+            contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/tangerine.css`)
+          ]).then(() => {
+          })
         })
     }
   },
@@ -97,9 +116,6 @@ export default {
     this.setFileName(fileName).then(() => {
       this.initEpub()
     })
-    // this.$store.dispatch('setFileName', fileName).then(() => {
-    //   this.initEpub()
-    // })
   }
 }
 </script>
