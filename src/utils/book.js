@@ -1,6 +1,7 @@
 import { getReadTime } from './localStorage'
 import { realPx } from './utils'
 
+// 字体大小组数
 export const FONT_SIZE_LIST = [
   { fontSize: 12 },
   { fontSize: 14 },
@@ -11,6 +12,7 @@ export const FONT_SIZE_LIST = [
   { fontSize: 24 }
 ]
 
+// 字体数组
 export const FONT_FAMILY = [
   { font: 'Default' },
   { font: 'Cabin' },
@@ -19,6 +21,7 @@ export const FONT_FAMILY = [
   { font: 'Tangerine' }
 ]
 
+// 主题列表
 export function themeList (vue) {
   return [
     {
@@ -72,7 +75,7 @@ export function themeList (vue) {
     }
   ]
 }
-
+// 动态添加css方法
 export function addCss (href) {
   const link = document.createElement('link')
   link.setAttribute('rel', 'stylesheet')
@@ -81,6 +84,7 @@ export function addCss (href) {
   document.getElementsByTagName('head')[0].appendChild(link)
 }
 
+// 动态移除link
 export function removeCss (href) {
   const links = document.getElementsByTagName('link')
   for (let i = links.length; i >= 0; i--) {
@@ -91,6 +95,7 @@ export function removeCss (href) {
   }
 }
 
+// 移除全部link
 export function removeAllCss () {
   removeCss(`${process.env.VUE_APP_RES_URL}/theme/theme_default.css`)
   removeCss(`${process.env.VUE_APP_RES_URL}/theme/theme_eye.css`)

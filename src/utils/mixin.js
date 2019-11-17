@@ -25,6 +25,7 @@ export const ebookMixin = {
       'offsetY',
       'isBookmark'
     ]),
+    // 主题列表
     themeList () {
       return themeList(this)
     },

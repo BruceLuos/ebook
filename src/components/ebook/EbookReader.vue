@@ -107,6 +107,7 @@ export default {
         this.initfontSize()
         this.initfontFamily()
         this.initTheme()
+        this.initGlobalStyle()
       })
       // 翻页(计算手势移动位移和时间间隔)
       this.rendition.on('touchstart', event => {

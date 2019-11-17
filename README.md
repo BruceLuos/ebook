@@ -137,5 +137,16 @@ local为对应的cn和en
 修改主题时通过theme.name来修改vuex中的defaultTheme
 
 
-
+全局主题设置
+需要往iframe也就是电子书中动态切换全局样式插入css
+编写addcss方法动态添加link
+ export function addCss (href) {
+  const link = document.createElement('link')
+  link.setAttribute('rel', 'stylesheet')
+  link.setAttribute('type', 'text/css')
+  link.setAttribute('href', href)
+  document.getElementsByTagName('head')[0].appendChild(link)
+}
+封装到initGlobalStyle函数中，并把它放进mixin中
+每次切换主题会一直加link标签所以也要编写一个removecss在每次切换主题时清除之前的主题css
  -->
