@@ -113,4 +113,20 @@ this.book.rendition.thems.fontSize(fontSize + 'px') 注意要加px
 
 使用localstorage将字体fontsize,fontfamily,book对象存储到localstorage中记录用户的字体设置
 通过getfontSize、setfontSize, getfontFamily, setfontFamily将字体格式和大小缓存并取出修改电子书中的字体
+
+标题的国际化
+使用vue-i18n
+创建lang文件夹 存有cn.js zn.js 还有index.js
+在index.js中
+new VueI18N({
+  locale,
+  messages
+})
+local为对应的cn和en
+
+
+电子书的主题设置
+切换主题，电子书内容和其他面板也切换主题
+先主题面板样式设置
+
  -->

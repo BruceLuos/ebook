@@ -9,7 +9,7 @@
 import { ebookMixin } from '../../utils/mixin'
 // import { mapActions } from 'vuex'
 import Epub from 'epubjs'
-import { saveFontSize, getFontSize , saveFontFamily ,getFontFamily} from '../../utils/localStorage'
+import { saveFontSize, getFontSize, saveFontFamily, getFontFamily } from '../../utils/localStorage'
 global.ePub = Epub
 export default {
   mixins: [ebookMixin],
@@ -66,7 +66,7 @@ export default {
     // 初始化获取缓存中的字体
     initfontFamily () {
         let font = getFontFamily(this.fileName)
-        if (!fontSize) {
+        if (!font) {
           saveFontFamily(this.fileName, this.defaultFontFamily)
         } else {
           this.rendition.themes.font(font)
@@ -119,7 +119,7 @@ export default {
         })
         // 加载不同的字体样式资源
         // 通过hooks这个钩子函数
-        this.rendition.hooks.content.register( contents => {
+        this.rendition.hooks.content.register ( contents => {
           // addStylesheet参数要求为一个url
           // 所以我们需要把资源放在nginx上
          Promise.all([
