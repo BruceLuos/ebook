@@ -103,4 +103,9 @@ this.book.rendition.thems.fontSize(fontSize + 'px') 注意要加px
 
 字体面板设置
 点击default字体设置弹窗
+点击设置字体font-family，设置弹窗出现
+点击弹窗的向下箭头或者选择字体后关闭弹窗
+选择字体后选中的那列显示高亮，并且EbookMenu组件中的设置按钮中的文字也发生变化
+选择字体后电子书的字体随之改变
+在菜单栏和标题栏关闭的时候，设置弹窗也关闭
  -->
