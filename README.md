@@ -110,4 +110,7 @@ this.book.rendition.thems.fontSize(fontSize + 'px') 注意要加px
 在菜单栏和标题栏关闭的时候，设置弹窗也关闭
 
 设置环境变量VUE_APP_RES_URL方便生产模式时url的管理
+
+使用localstorage将字体fontsize,fontfamily,book对象存储到localstorage中记录用户的字体设置
+通过getfontSize、setfontSize, getfontFamily, setfontFamily将字体格式和大小缓存并取出修改电子书中的字体
  -->

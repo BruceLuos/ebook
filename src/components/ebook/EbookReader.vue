@@ -9,6 +9,7 @@
 import { ebookMixin } from '../../utils/mixin'
 // import { mapActions } from 'vuex'
 import Epub from 'epubjs'
+import { saveFontSize, getFontSize , saveFontFamily ,getFontFamily} from '../../utils/localStorage'
 global.ePub = Epub
 export default {
   mixins: [ebookMixin],
@@ -52,6 +53,26 @@ export default {
       // 字体设置面板隐藏
       this.setFontFamilyVisible(false)
     },
+    // 初始化获取缓存中的字体大小
+    initfontSize () {
+        let fontSize = getFontSize(this.fileName)
+        if (!fontSize) {
+          saveFontSize(this.fileName, this.defaultFontSize)
+        } else {
+          this.rendition.themes.fontSize(fontSize + 'px')
+          this.setDefaultFontSize(fontSize)
+        }
+    },
+    // 初始化获取缓存中的字体
+    initfontFamily () {
+        let font = getFontFamily(this.fileName)
+        if (!fontSize) {
+          saveFontFamily(this.fileName, this.defaultFontFamily)
+        } else {
+          this.rendition.themes.font(font)
+          this.setDefaultFontFamily(font)
+        }
+    },
     // 合并电子书url并解析渲染电子书
     initEpub () {
       // http://localhost:8080/#/ebook/Biomedicine|2014_Book_Self-ReportedPopulationHealthA
@@ -67,8 +88,11 @@ export default {
         width: window.innerWidth,
         height: window.innerHeight
       })
-      // 展示
-      this.rendition.display()
+      // 展示电子书  在这过程中获取存储在localstorage中的字体属性
+      this.rendition.display().then(() => {
+        this.initfontSize()
+        this.initfontFamily()
+      })
       // 翻页(计算手势移动位移和时间间隔)
       this.rendition.on('touchstart', event => {
       //  console.log(event)
