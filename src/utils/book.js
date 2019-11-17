@@ -22,6 +22,7 @@ export const FONT_FAMILY = [
 export function themeList (vue) {
   return [
     {
+      // alias国际化，可切换英文
       alias: vue.$t('book.themeDefault'),
       name: 'Default',
       style: {

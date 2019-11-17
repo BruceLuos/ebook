@@ -128,5 +128,14 @@ local为对应的cn和en
 电子书的主题设置
 切换主题，电子书内容和其他面板也切换主题
 先主题面板样式设置
+创建EbookSettingTheme.vue组件
+通过menuVisible && settingVisible === 1来显示
+给EbookMenu组件中的小太阳添加showSetting(1)事件，并传入1
+在EbookMenu组件中引入EbookSettingTheme.vue组件
+在utils文件夹下的book.js中添加themeList数组，生成主题列表
+主题需要在电子书对象渲染完后注册进去，查看缓存是否存在主题，
+修改主题时通过theme.name来修改vuex中的defaultTheme
+
+
 
  -->

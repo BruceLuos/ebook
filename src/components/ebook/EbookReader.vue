@@ -9,7 +9,7 @@
 import { ebookMixin } from '../../utils/mixin'
 // import { mapActions } from 'vuex'
 import Epub from 'epubjs'
-import { saveFontSize, getFontSize, saveFontFamily, getFontFamily } from '../../utils/localStorage'
+import { saveFontSize, getFontSize, saveFontFamily, getFontFamily, getTheme, saveTheme} from '../../utils/localStorage'
 global.ePub = Epub
 export default {
   mixins: [ebookMixin],
@@ -73,6 +73,20 @@ export default {
           this.setDefaultFontFamily(font)
         }
     },
+    // 初始化获取缓存中的主题，注册主题
+    initTheme () {
+       let defaultTheme = getTheme(this.fileName)
+        if (!defaultTheme) {
+          defaultTheme = this.themeList[0].name
+          saveTheme(this.fileName, defaultTheme)
+        }
+        this.setDefaultTheme(defaultTheme)
+        // 注册主题进电子书中
+        this.themeList.forEach(theme => {
+          this.rendition.themes.register(theme.name, theme.style)
+        })
+        this.rendition.themes.select(defaultTheme)
+    },
     // 合并电子书url并解析渲染电子书
     initEpub () {
       // http://localhost:8080/#/ebook/Biomedicine|2014_Book_Self-ReportedPopulationHealthA
@@ -92,6 +106,7 @@ export default {
       this.rendition.display().then(() => {
         this.initfontSize()
         this.initfontFamily()
+        this.initTheme()
       })
       // 翻页(计算手势移动位移和时间间隔)
       this.rendition.on('touchstart', event => {
