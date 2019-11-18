@@ -45,22 +45,28 @@
     // progress，bookAvilible都放在mixin中
     methods: {
       // 进度条发生改变时执行的方法
+      // 拖动时获取值为progress进度值 （0-100）
       onProgressChange(progress) {
         this.setProgress(progress).then(() => {
           this.displayProgress()
+          // 改变进度条的背景色
           this.updateProgressBg()
         })
       },
       // 拖动进度条中执行的方法
       onProgressInput(progress) {
         this.setProgress(progress).then(() => {
+          // 改变进度条的背景色
           this.updateProgressBg()
         })
       },
       displayProgress() {
+        // 书籍内容的百分比
         const cfi = this.currentBook.locations.cfiFromPercentage(this.progress / 100)
+        // 重新定位书籍内容并展示
         this.display(cfi)
       },
+      // 改变进度条背景色
       updateProgressBg() {
         this.$refs.progress.style.backgroundSize = `${this.progress}% 100%`
       },
@@ -86,6 +92,7 @@
       }
     },
     updated() {
+      // 初始状态下的进度条背景色
       this.updateProgressBg()
     }
   }

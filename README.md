@@ -158,4 +158,10 @@ local为对应的cn和en
 在vuex中创建progress、bookAvailable两个公共变量
 在EbookReader.vue组件的initEpub方法中添加分页功能；
 进度条的拖动需要bookavailable为true也就是要在电纸书解析完分页成功后才能设置true然后才可以拖动
+
+拖动进度条时的具体功能实现
+拖动时进度百分比的改变，进度条背景色的改变，电子书内容的改变
+获取电子书对应移动的百分比来进行内容展示
+cli =this.currentBook.locations.cfiFromPercentage(this.progress / 100)
+this.currentBook.rendition.display(cli)
  -->
