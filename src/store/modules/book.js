@@ -9,7 +9,7 @@ const book = {
     defaultTheme: 'Default',
     bookAvailable: false,
     progress: 0,
-    section: 0,
+    section: 0, // 0表示第一章节
     isPaginating: true,
     currentBook: null,
     navigation: null,

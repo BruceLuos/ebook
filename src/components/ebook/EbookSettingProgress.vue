@@ -42,7 +42,7 @@
 
   export default {
     mixins: [ebookMixin],
-    // progress，bookAvilible都放在mixin中
+    // progress，bookAvilible,section都放在mixin中
     methods: {
       // 进度条发生改变时执行的方法
       // 拖动时获取值为progress进度值 （0-100）
@@ -64,12 +64,14 @@
         // 书籍内容的百分比
         const cfi = this.currentBook.locations.cfiFromPercentage(this.progress / 100)
         // 重新定位书籍内容并展示
-        this.display(cfi)
+        // this.display(cfi)
+        this.currentBook.rendition.display(cfi)
       },
       // 改变进度条背景色
       updateProgressBg() {
         this.$refs.progress.style.backgroundSize = `${this.progress}% 100%`
       },
+      // 上一章
       prevSection() {
         if (this.section > 0 && this.bookAvailable) {
           this.setSection(this.section - 1).then(() => {
@@ -78,17 +80,21 @@
         }
       },
       nextSection() {
+        // spine表示章节进度对象
         if (this.section < this.currentBook.spine.length - 1 && this.bookAvailable) {
           this.setSection(this.section + 1).then(() => {
             this.displaySection()
           })
         }
       },
+      // 展示章节
       displaySection() {
-        const sectionInfo = this.currentBook.section(this.section)
-        if (sectionInfo && sectionInfo.href) {
-          this.display(sectionInfo.href)
-        }
+        // 上一章节信息
+            const sectionInfo = this.currentBook.section(this.section)
+            // 当存在上一章节信息和地址时，展示在电子书上
+            if (sectionInfo && sectionInfo.href) {
+              this.currentBook.rendition.display(sectionInfo.href)
+            }
       }
     },
     updated() {
