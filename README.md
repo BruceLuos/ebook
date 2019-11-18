@@ -164,4 +164,11 @@ local为对应的cn和en
 获取电子书对应移动的百分比来进行内容展示
 cli =this.currentBook.locations.cfiFromPercentage(this.progress / 100)
 this.currentBook.rendition.display(cli)
+
+上下章节按钮实现,在vuex中
+改变section改变后展示最新章节内容
+
+进度跟随章节跳转改变
+需要通过currentLoaction中
+ const progress =  this.currentBook.locations.percentageFromCfi(currentLocation.start.cfi)
  -->

@@ -29,7 +29,7 @@
         </div>
         <div class="text-wrapper">
           <!-- 当前章节名 -->
-          <span class="progress-section-text">{{getSectionName}}</span>
+          <!-- <span class="progress-section-text">{{getSectionName}}</span> -->
           <span>({{bookAvailable ? progress + '%' : '加载中...'}})</span>
         </div>
       </div>
@@ -93,8 +93,18 @@
             const sectionInfo = this.currentBook.section(this.section)
             // 当存在上一章节信息和地址时，展示在电子书上
             if (sectionInfo && sectionInfo.href) {
-              this.currentBook.rendition.display(sectionInfo.href)
+              this.currentBook.rendition.display(sectionInfo.href).then(() => {
+                this.refreshLocation()
+              })
             }
+      },
+      refreshLocation () {
+        // 获取电子书的currentLocation对象里面有登记当前章节的开始位置等信息
+        const currentLocation = this.currentBook.rendition.currentLocation()
+        console.log(currentLocation)
+        const progress =  this.currentBook.locations.percentageFromCfi(currentLocation.start.cfi)
+        console.log(progress)
+        this.setProgress(Math.floor(progress * 100))
       }
     },
     updated() {
