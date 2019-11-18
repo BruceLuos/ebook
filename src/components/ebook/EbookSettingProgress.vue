@@ -39,7 +39,7 @@
 
 <script>
   import { ebookMixin } from '../../utils/mixin'
-
+  import { getBookmark, saveLocation } from '../../utils/localStorage'
   export default {
     mixins: [ebookMixin],
     // progress，bookAvilible,section等很多可复用属性都放在mixin中
@@ -74,12 +74,15 @@
           this.updateProgressBg()
         })
       },
+      // 显示进度条
       displayProgress() {
         // 书籍内容的百分比
         const cfi = this.currentBook.locations.cfiFromPercentage(this.progress / 100)
         // 重新定位书籍内容并展示
-        // this.display(cfi)
-        this.currentBook.rendition.display(cfi)
+        this.display(cfi)
+        // this.currentBook.rendition.display(cfi).then(() => {
+        //   this.refreshLocation()
+        // })
       },
       // 改变进度条背景色
       updateProgressBg() {
@@ -107,19 +110,25 @@
             const sectionInfo = this.currentBook.section(this.section)
             // 当存在上一章节信息和地址时，展示在电子书上
             if (sectionInfo && sectionInfo.href) {
-              this.currentBook.rendition.display(sectionInfo.href).then(() => {
-                this.refreshLocation()
-              })
+              this.display(sectionInfo.href)
+              // this.currentBook.rendition.display(sectionInfo.href).then(() => {
+              //   //刷新章节进度
+              //   this.refreshLocation()
+              // })
             }
-      },
-      refreshLocation () {
-        // 获取电子书的currentLocation对象里面有登记当前章节的开始位置等信息
-        const currentLocation = this.currentBook.rendition.currentLocation()
-        console.log(currentLocation)
-        const progress =  this.currentBook.locations.percentageFromCfi(currentLocation.start.cfi)
-        console.log(progress)
-        this.setProgress(Math.floor(progress * 100))
       }
+      //刷新章节进度,这里EbookReader也需要用到所以要把他放在mixin中
+      // refreshLocation () {
+      //   // 获取电子书的currentLocation对象里面有登记当前章节的开始位置等信息
+      //   const currentLocation = this.currentBook.rendition.currentLocation()
+      //   console.log(currentLocation)
+      //   const startCfi = currentLocation.start.cfi
+      //   const progress =  this.currentBook.locations.percentageFromCfi(startCfi)
+      //   console.log(progress)
+      //   this.setProgress(Math.floor(progress * 100))
+      //   // 缓存章节进度
+      //   saveLocation(this.fileName, startCfi)
+      // }
     },
     updated() {
       // 初始状态下的进度条背景色

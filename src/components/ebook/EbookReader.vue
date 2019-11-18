@@ -9,7 +9,7 @@
 import { ebookMixin } from '../../utils/mixin'
 // import { mapActions } from 'vuex'
 import Epub from 'epubjs'
-import { saveFontSize, getFontSize, saveFontFamily, getFontFamily, getTheme, saveTheme} from '../../utils/localStorage'
+import { saveFontSize, getFontSize, saveFontFamily, getFontFamily, getTheme, saveTheme, getLocation} from '../../utils/localStorage'
 global.ePub = Epub
 export default {
   mixins: [ebookMixin],
@@ -122,12 +122,13 @@ export default {
         height: window.innerHeight
       })
       // 展示电子书  在这过程中获取存储在localstorage中的字体属性
-      this.rendition.display().then(() => {
-        this.initfontSize()
-        this.initfontFamily()
-        this.initTheme()
-        this.initGlobalStyle()
-      })
+      const location = getLocation(this.fileName)
+        this.display(location, () => {
+          this.initTheme()
+          this.initFontSize()
+          this.initFontFamily()
+          this.initGlobalStyle()
+        })
       // 加载不同的字体样式资源
         // 通过hooks这个钩子函数
         this.rendition.hooks.content.register ( contents => {

@@ -76,12 +76,14 @@ export const ebookMixin = {
       }
     },
     refreshLocation () {
+      // 获取电子书的currentLocation对象里面有登记当前章节的开始位置等信息
       const currentLocation = this.currentBook.rendition.currentLocation()
       if (currentLocation && currentLocation.start) {
         const startCfi = currentLocation.start.cfi
         const progress = this.currentBook.locations.percentageFromCfi(startCfi)
         this.setProgress(Math.floor(progress * 100))
         this.setSection(currentLocation.start.index)
+        // 缓存章节进度
         saveLocation(this.fileName, startCfi)
         const bookmark = getBookmark(this.fileName)
         if (bookmark) {
