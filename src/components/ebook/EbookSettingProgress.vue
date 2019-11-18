@@ -2,14 +2,17 @@
   <transition name="slide-up">
     <div class="setting-wrapper" v-show="menuVisible && settingVisible === 2">
       <div class="setting-progress">
+        <!-- 获取阅读时间 -->
         <div class="read-time-wrapper">
           <span class="read-time-text">{{getReadTimeText()}}</span>
           <span class="icon-forward"></span>
         </div>
         <div class="progress-wrapper">
+          <!-- 前一章节 -->
           <div class="progress-icon-wrapper" @click="prevSection()">
             <span class="icon-back"></span>
           </div>
+          <!-- 进度条 -->
           <input class="progress" type="range"
                  max="100"
                  min="0"
@@ -19,11 +22,13 @@
                  :value="progress"
                  :disabled="!bookAvailable"
                  ref="progress">
+          <!-- 下一章节 -->
           <div class="progress-icon-wrapper" @click="nextSection()">
             <span class="icon-forward"></span>
           </div>
         </div>
         <div class="text-wrapper">
+          <!-- 当前章节名 -->
           <span class="progress-section-text">{{getSectionName}}</span>
           <span>({{bookAvailable ? progress + '%' : '加载中...'}})</span>
         </div>
@@ -37,13 +42,16 @@
 
   export default {
     mixins: [ebookMixin],
+    // progress，bookAvilible都放在mixin中
     methods: {
+      // 进度条发生改变时执行的方法
       onProgressChange(progress) {
         this.setProgress(progress).then(() => {
           this.displayProgress()
           this.updateProgressBg()
         })
       },
+      // 拖动进度条中执行的方法
       onProgressInput(progress) {
         this.setProgress(progress).then(() => {
           this.updateProgressBg()

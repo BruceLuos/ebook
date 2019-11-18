@@ -73,43 +73,9 @@ export default {
           this.setDefaultFontFamily(font)
         }
     },
-    // 初始化获取缓存中的主题，注册主题
-    initTheme () {
-       let defaultTheme = getTheme(this.fileName)
-        if (!defaultTheme) {
-          defaultTheme = this.themeList[0].name
-          saveTheme(this.fileName, defaultTheme)
-        }
-        this.setDefaultTheme(defaultTheme)
-        // 注册主题进电子书中
-        this.themeList.forEach(theme => {
-          this.rendition.themes.register(theme.name, theme.style)
-        })
-        this.rendition.themes.select(defaultTheme)
-    },
-    // 合并电子书url并解析渲染电子书
-    initEpub () {
-      // http://localhost:8080/#/ebook/Biomedicine|2014_Book_Self-ReportedPopulationHealthA
-      const url = 'http://192.168.1.105:9090/epub/' + this.fileName + '.epub'
-      console.log(url)
-      // 解析获取book
-      this.book = new Epub(url)
-      // 将book对象存放在vuex中
-      this.setCurrentBook(this.book)
-      console.log(this.book)
-      // 绑定dom read进行书籍的渲染
-      this.rendition = this.book.renderTo('read', {
-        width: window.innerWidth,
-        height: window.innerHeight
-      })
-      // 展示电子书  在这过程中获取存储在localstorage中的字体属性
-      this.rendition.display().then(() => {
-        this.initfontSize()
-        this.initfontFamily()
-        this.initTheme()
-        this.initGlobalStyle()
-      })
-      // 翻页(计算手势移动位移和时间间隔)
+    // 手势
+    initGesture () {
+       // 翻页(计算手势移动位移和时间间隔)
       this.rendition.on('touchstart', event => {
       //  console.log(event)
        this.touchStartX = event.changedTouches[0].clientX
@@ -133,7 +99,36 @@ export default {
           // event.preventDefault()
           event.stopPropagation()
         })
-        // 加载不同的字体样式资源
+    },
+    // 初始化获取缓存中的主题，注册主题
+    initTheme () {
+       let defaultTheme = getTheme(this.fileName)
+        if (!defaultTheme) {
+          defaultTheme = this.themeList[0].name
+          saveTheme(this.fileName, defaultTheme)
+        }
+        this.setDefaultTheme(defaultTheme)
+        // 注册主题进电子书中
+        this.themeList.forEach(theme => {
+          this.rendition.themes.register(theme.name, theme.style)
+        })
+        this.rendition.themes.select(defaultTheme)
+    },
+    // 电子书的渲染
+    initRendition () {
+       // 绑定dom read进行书籍的渲染
+      this.rendition = this.book.renderTo('read', {
+        width: window.innerWidth,
+        height: window.innerHeight
+      })
+      // 展示电子书  在这过程中获取存储在localstorage中的字体属性
+      this.rendition.display().then(() => {
+        this.initfontSize()
+        this.initfontFamily()
+        this.initTheme()
+        this.initGlobalStyle()
+      })
+      // 加载不同的字体样式资源
         // 通过hooks这个钩子函数
         this.rendition.hooks.content.register ( contents => {
           // addStylesheet参数要求为一个url
@@ -146,6 +141,28 @@ export default {
           ]).then(() => {
           })
         })
+    },
+    // 合并电子书url并解析渲染电子书
+    initEpub () {
+      // http://localhost:8080/#/ebook/Biomedicine|2014_Book_Self-ReportedPopulationHealthA
+      const url = 'http://192.168.1.105:9090/epub/' + this.fileName + '.epub'
+      console.log(url)
+      // 解析获取book
+      this.book = new Epub(url)
+      // 将book对象存放在vuex中
+      this.setCurrentBook(this.book)
+      console.log(this.book)
+      // 电子书的渲染
+      this.initRendition()
+      // 手势
+      this.initGesture()
+      // 分页算法 ，需要在book解析完后才可以进行分页
+      this.book.ready.then(() => {
+          return this.book.locations.generate(750 * (window.innerWidth / 375) * (getFontSize(this.fileName) / 16))
+        }).then(locations => {
+
+        })
+        this.setBookAvailable(true)
     }
   },
   mounted () {

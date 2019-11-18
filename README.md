@@ -153,5 +153,9 @@ local为对应的cn和en
 
 阅读进度条设置
 记录阅读时间，调整进度百分比，显示当前章节名，左右按钮切换章节
-
+创建EbookSettingProgress.vue组件，并在EbookMenu组件中使用
+在EbookMenu组件中的小太阳上添加showSetting(2)事件
+在vuex中创建progress、bookAvailable两个公共变量
+在EbookReader.vue组件的initEpub方法中添加分页功能；
+进度条的拖动需要bookavailable为true也就是要在电纸书解析完分页成功后才能设置true然后才可以拖动
  -->
