@@ -171,4 +171,7 @@ this.currentBook.rendition.display(cli)
 进度跟随章节跳转改变
 需要通过currentLoaction中
  const progress =  this.currentBook.locations.percentageFromCfi(currentLocation.start.cfi)
+
+ 获取章节名label
+ return this.currentBook.navigation.get(sectionInfo.href).label
  -->

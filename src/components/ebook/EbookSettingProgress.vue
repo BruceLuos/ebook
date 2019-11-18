@@ -29,7 +29,7 @@
         </div>
         <div class="text-wrapper">
           <!-- 当前章节名 -->
-          <!-- <span class="progress-section-text">{{getSectionName}}</span> -->
+          <span class="progress-section-text">{{getSectionName}}</span>
           <span>({{bookAvailable ? progress + '%' : '加载中...'}})</span>
         </div>
       </div>
@@ -42,7 +42,21 @@
 
   export default {
     mixins: [ebookMixin],
-    // progress，bookAvilible,section都放在mixin中
+    // progress，bookAvilible,section等很多可复用属性都放在mixin中
+    computed: {
+      getSectionName () {
+        if (this.section) {
+          // 获得当前章节对象
+          const sectionInfo = this.currentBook.section(this.section)
+          // 获取当前章节名
+          if (sectionInfo && sectionInfo.href) {
+            return this.currentBook.navigation.get(sectionInfo.href).label
+            console.log(this.currentBook.navigation.get(sectionInfo.href).label)
+          }
+          return ''
+        }
+      }
+    },
     methods: {
       // 进度条发生改变时执行的方法
       // 拖动时获取值为progress进度值 （0-100）
