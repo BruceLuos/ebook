@@ -66,6 +66,7 @@ export const ebookMixin = {
       'setOffsetY',
       'setIsBookmark'
     ]),
+    // 初始化全局主题样式
     initGlobalStyle () {
       removeAllCss()
       switch (this.defaultTheme) {
@@ -120,24 +121,35 @@ export const ebookMixin = {
         }
       }
     },
+    // 电子书的展示
     display (target, cb) {
       if (target) {
         this.currentBook.rendition.display(target).then(() => {
           this.refreshLocation()
-          // if (cb) cb()
+          if (cb) {
+            cb()
+          }
         })
       } else {
         this.currentBook.rendition.display().then(() => {
           this.refreshLocation()
-          // if (cb) cb()
+          if (cb) {
+            cb()
+          }
         })
       }
     },
-    hideTitleAndMenu () {
-      this.setMenuVisible(false)
-      this.setSettingVisible(-1)
-      this.setFontFamilyVisible(false)
-    },
+    // 隐藏标题栏和地步菜单栏
+   // 标题和菜单的显示
+   hideTitleAndMenu () {
+    // this.$store.dispatch('setMenuVisible', false)
+    this.setMenuVisible(false)
+    // 字体属性面板隐藏
+    this.setSettingVisible(-1)
+    // 字体设置面板隐藏
+    this.setFontFamilyVisible(false)
+   },
+    // 获取阅读时间
     getReadTimeText () {
       return this.$t('book.haveRead').replace('$1', getReadTimeByMinute(this.fileName))
     }

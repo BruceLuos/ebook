@@ -45,14 +45,14 @@ export default {
       this.setMenuVisible(!this.menuVisible)
     },
     // 标题和菜单的显示
-    hideTitleAndMenu () {
-      // this.$store.dispatch('setMenuVisible', false)
-      this.setMenuVisible(false)
-      // 字体属性面板隐藏
-      this.setSettingVisible(-1)
-      // 字体设置面板隐藏
-      this.setFontFamilyVisible(false)
-    },
+    // hideTitleAndMenu () {
+    //   // this.$store.dispatch('setMenuVisible', false)
+    //   this.setMenuVisible(false)
+    //   // 字体属性面板隐藏
+    //   this.setSettingVisible(-1)
+    //   // 字体设置面板隐藏
+    //   this.setFontFamilyVisible(false)
+    // },
     // 初始化获取缓存中的字体大小
     initfontSize () {
         let fontSize = getFontSize(this.fileName)
@@ -104,6 +104,7 @@ export default {
     initTheme () {
        let defaultTheme = getTheme(this.fileName)
         if (!defaultTheme) {
+          console.log('hhh')
           defaultTheme = this.themeList[0].name
           saveTheme(this.fileName, defaultTheme)
         }
@@ -123,6 +124,7 @@ export default {
       })
       // 展示电子书  在这过程中获取存储在localstorage中的字体属性
       const location = getLocation(this.fileName)
+      console.log(location)
         this.display(location, () => {
           this.initTheme()
           this.initFontSize()
