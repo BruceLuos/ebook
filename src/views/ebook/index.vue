@@ -10,8 +10,8 @@
 import EbookReader from '../../components/ebook/EbookReader'
 import EbookTitle from '../../components/ebook/EbookTitle'
 import EbookMenu from '../../components/ebook/EbookMenu'
-  import { getReadTime, saveReadTime } from '../../utils/localStorage'
-  import { ebookMixin } from '../../utils/mixin'
+import { getReadTime, saveReadTime } from '../../utils/localStorage'
+import { ebookMixin } from '../../utils/mixin'
 export default {
   mixins: [ebookMixin],
   components: {
@@ -23,6 +23,7 @@ export default {
     // 记录时间
     startLoopReadTime() {
         let readTime = getReadTime(this.fileName)
+        console.log(readTime)
         if (!readTime) {
           readTime = 0
         }
