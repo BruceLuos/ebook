@@ -6,7 +6,9 @@
     <div class="content" v-if="settingVisible === 3">
       <div class="content-page-wrapper">
         <!-- 内容列表 动态组件-->
-        <div class="content-page"></div>
+        <div class="content-page">
+           <component :is="currentTab === 1 ? content : bookmark"></component>
+        </div>
         <!-- 切换组件 -->
         <div class="content-page-tab">
           <div class="content-page-tab-item"
@@ -31,13 +33,19 @@
 
 <script>
 import { ebookMixin } from '../../utils/mixin'
+import EbookSlideContents from './EbookSlideContents'
+import EbookSlideBookmark from './EbookSlideBookmark'
+
 export default {
   mixins: [ebookMixin],
   data() {
       return {
-        currentTab: 1
-        // content: EbookSlideContents,
-        // bookmark: EbookSlideBookmark
+        // 选择标识符
+        currentTab: 1,
+        // 目录组件
+        content: EbookSlideContents,
+        // 书签组件
+        bookmark: EbookSlideBookmark
       }
     },
     methods: {
