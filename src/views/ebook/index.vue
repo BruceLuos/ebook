@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     // 记录时间
-    startLoopReadTime() {
+    startLoopReadTime () {
         let readTime = getReadTime(this.fileName)
         console.log(readTime)
         if (!readTime) {

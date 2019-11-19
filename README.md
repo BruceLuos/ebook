@@ -182,4 +182,9 @@ this.currentBook.rendition.display(cli)
  记录阅读时间
  需要在index.vue中记录阅读开始时间startLoopReadTime() 
  然后在EbookSettingProgress.vue中调用getReadTimeText()获取当前阅读时间
+
+ 显示目录
+ 目录组件模板EbookSlide
+ 目录组件，书签组件，加载动画组件
+ 
  -->

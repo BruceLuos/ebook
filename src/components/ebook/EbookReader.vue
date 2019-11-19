@@ -108,7 +108,7 @@ export default {
           saveTheme(this.fileName, defaultTheme)
         }
         this.setDefaultTheme(defaultTheme)
-        // 注册主题进电子书中
+         // 注册主题进电子书中
         this.themeList.forEach(theme => {
           this.rendition.themes.register(theme.name, theme.style)
         })
