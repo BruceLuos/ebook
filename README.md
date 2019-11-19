@@ -174,4 +174,12 @@ this.currentBook.rendition.display(cli)
 
  获取章节名label
  return this.currentBook.navigation.get(sectionInfo.href).label
+
+ 缓存章节进度，将复用的方法refreshLoaction,display方法放进mixin中
+ 刷新后进度没有更新：需要在分页完成后refreshLoaction
+ 章节名也需要在refreshLocation加入缓存setsectin
+
+ 记录阅读时间
+ 需要在index.vue中记录阅读开始时间startLoopReadTime() 
+ 然后在EbookSettingProgress.vue中调用getReadTimeText()获取当前阅读时间
  -->

@@ -103,11 +103,14 @@ export function removeAllCss () {
   removeCss(`${process.env.VUE_APP_RES_URL}/theme/theme_night.css`)
 }
 
+// 时间的取整为分钟
 export function getReadTimeByMinute (fileName) {
+  // 获取缓存中的时间
   const readTime = getReadTime(fileName)
   if (!readTime) {
     return 0
   } else {
+    // 向上取整时间半分钟为一分钟
     return Math.ceil(readTime / 60)
   }
 }

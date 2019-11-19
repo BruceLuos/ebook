@@ -9,7 +9,7 @@
 import { ebookMixin } from '../../utils/mixin'
 // import { mapActions } from 'vuex'
 import Epub from 'epubjs'
-import { saveFontSize, getFontSize, saveFontFamily, getFontFamily, getTheme, saveTheme, getLocation} from '../../utils/localStorage'
+import { saveFontSize, getFontSize, saveFontFamily, getFontFamily, getTheme, saveTheme, getLocation } from '../../utils/localStorage'
 global.ePub = Epub
 export default {
   mixins: [ebookMixin],
@@ -131,7 +131,7 @@ export default {
         })
       // 加载不同的字体样式资源
         // 通过hooks这个钩子函数
-        this.rendition.hooks.content.register ( contents => {
+        this.rendition.hooks.content.register(contents => {
           // addStylesheet参数要求为一个url
           // 所以我们需要把资源放在nginx上
          Promise.all([
@@ -161,9 +161,10 @@ export default {
       this.book.ready.then(() => {
           return this.book.locations.generate(750 * (window.innerWidth / 375) * (getFontSize(this.fileName) / 16))
         }).then(locations => {
-
+          this.setBookAvailable(true)
+          // 分页成功后也需要刷新章节进度
+          this.refreshLocation()
         })
-        this.setBookAvailable(true)
     }
   },
   mounted () {

@@ -29,8 +29,19 @@ export const ebookMixin = {
     themeList () {
       return themeList(this)
     },
+    // getSectionName () {
+    //   return this.section ? this.navigation[this.section].label : ''
+    // }
     getSectionName () {
-      return this.section ? this.navigation[this.section].label : ''
+      if (this.section) {
+        // 获得当前章节对象
+        const sectionInfo = this.currentBook.section(this.section)
+        // 获取当前章节名
+        if (sectionInfo && sectionInfo.href) {
+          return this.currentBook.navigation.get(sectionInfo.href).label
+        }
+        return ''
+      }
     }
   },
   methods: {
@@ -82,6 +93,7 @@ export const ebookMixin = {
         const startCfi = currentLocation.start.cfi
         const progress = this.currentBook.locations.percentageFromCfi(startCfi)
         this.setProgress(Math.floor(progress * 100))
+        // 章节的刷新
         this.setSection(currentLocation.start.index)
         // 缓存章节进度
         saveLocation(this.fileName, startCfi)

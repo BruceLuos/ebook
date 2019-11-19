@@ -39,23 +39,11 @@
 
 <script>
   import { ebookMixin } from '../../utils/mixin'
-  import { getBookmark, saveLocation } from '../../utils/localStorage'
   export default {
     mixins: [ebookMixin],
     // progress，bookAvilible,section等很多可复用属性都放在mixin中
     computed: {
-      getSectionName () {
-        if (this.section) {
-          // 获得当前章节对象
-          const sectionInfo = this.currentBook.section(this.section)
-          // 获取当前章节名
-          if (sectionInfo && sectionInfo.href) {
-            return this.currentBook.navigation.get(sectionInfo.href).label
-            console.log(this.currentBook.navigation.get(sectionInfo.href).label)
-          }
-          return ''
-        }
-      }
+
     },
     methods: {
       // 进度条发生改变时执行的方法
@@ -185,7 +173,7 @@
             width: px2rem(20);
             border-radius: 50%;
             background: white;
-            box-shadow: 0 4px 4px 0 rgba(0, 0, 0, .15);
+            box-shadow: 0 4px 4px 0 rgba(0, 0, 0, .35);
             border: px2rem(1) solid #ddd;
           }
         }
