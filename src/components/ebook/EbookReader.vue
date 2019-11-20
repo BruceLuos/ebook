@@ -10,6 +10,7 @@ import { ebookMixin } from '../../utils/mixin'
 // import { mapActions } from 'vuex'
 import Epub from 'epubjs'
 import { saveFontSize, getFontSize, saveFontFamily, getFontFamily, getTheme, saveTheme, getLocation } from '../../utils/localStorage'
+import { flatten } from '../../utils/book'
 global.ePub = Epub
 export default {
   mixins: [ebookMixin],
@@ -145,6 +146,31 @@ export default {
           })
         })
     },
+    // 获取书籍信息
+    parseBook () {
+      // 获取书籍图片
+      this.book.loaded.cover.then(cover => {
+          this.book.archive.createUrl(cover).then(url => {
+            this.setCover(url)
+          })
+        })
+        // 获取书籍信息
+        this.book.loaded.metadata.then(metadata => {
+          this.setMetadata(metadata)
+        })
+        this.book.loaded.navigation.then(nav => {
+          const navItem = flatten(nav.toc)
+
+          function find(item, level = 0) {
+            return !item.parent ? level : find(navItem.filter(parentItem => parentItem.id === item.parent)[0], ++level)
+          }
+
+          navItem.forEach(item => {
+            item.level = find(item)
+          })
+          this.setNavigation(navItem)
+        })
+    },
     // 合并电子书url并解析渲染电子书
     initEpub () {
       // http://localhost:8080/#/ebook/Biomedicine|2014_Book_Self-ReportedPopulationHealthA
@@ -159,6 +185,8 @@ export default {
       this.initRendition()
       // 手势
       this.initGesture()
+      // 获取书籍信息
+      this.parseBook()
       // 分页算法 ，需要在book解析完后才可以进行分页
       this.book.ready.then(() => {
           return this.book.locations.generate(750 * (window.innerWidth / 375) * (getFontSize(this.fileName) / 16))

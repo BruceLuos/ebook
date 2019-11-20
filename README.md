@@ -190,5 +190,10 @@ this.currentBook.rendition.display(cli)
  使用动态组件底部目录，书签标签切换
 
  目录组件搜索框编写
+通过切换searchVisible的值来展示cancel按钮
 
+图书信息模块
+左图片,中书籍信息,右阅读进度
+获取图片需要在图书初始化时获取图片的url, this.book.loaded.cover
+同样也要获取书籍信息 this.book.loaded.metadata
  -->
