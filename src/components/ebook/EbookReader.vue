@@ -55,17 +55,17 @@ export default {
     //   this.setFontFamilyVisible(false)
     // },
     // 初始化获取缓存中的字体大小
-    initfontSize () {
+    initFontSize() {
         let fontSize = getFontSize(this.fileName)
         if (!fontSize) {
           saveFontSize(this.fileName, this.defaultFontSize)
         } else {
-          this.rendition.themes.fontSize(fontSize + 'px')
+          this.rendition.themes.fontSize(fontSize)
           this.setDefaultFontSize(fontSize)
         }
-    },
+      },
     // 初始化获取缓存中的字体
-    initfontFamily () {
+    initFontFamily() {
         let font = getFontFamily(this.fileName)
         if (!font) {
           saveFontFamily(this.fileName, this.defaultFontFamily)
@@ -73,7 +73,7 @@ export default {
           this.rendition.themes.font(font)
           this.setDefaultFontFamily(font)
         }
-    },
+      },
     // 手势
     initGesture () {
        // 翻页(计算手势移动位移和时间间隔)
@@ -158,13 +158,15 @@ export default {
         this.book.loaded.metadata.then(metadata => {
           this.setMetadata(metadata)
         })
+        // 获取目录数据
         this.book.loaded.navigation.then(nav => {
+          // toc是一级目录
           const navItem = flatten(nav.toc)
-
+          // 查看是否含有父级
           function find(item, level = 0) {
             return !item.parent ? level : find(navItem.filter(parentItem => parentItem.id === item.parent)[0], ++level)
           }
-
+          // 为一级内容添加标识level
           navItem.forEach(item => {
             item.level = find(item)
           })

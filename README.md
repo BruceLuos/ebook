@@ -189,11 +189,26 @@ this.currentBook.rendition.display(cli)
  
  使用动态组件底部目录，书签标签切换
 
- 目录组件搜索框编写
+目录组件搜索框编写
 通过切换searchVisible的值来展示cancel按钮
 
 图书信息模块
 左图片,中书籍信息,右阅读进度
 获取图片需要在图书初始化时获取图片的url, this.book.loaded.cover
 同样也要获取书籍信息 this.book.loaded.metadata
+
+目录列表模块
+需要获取书籍目录数据
+因为传来的数据是3级树形结构的，为了方便目录的显示，我们需要将数据进行扁平化为一维
+这里使用concat和扩展运算符
+function flatten2(array) {
+      return [].concat(...array.map(item => {
+        return [].concat(item, ...flatten2(item.subitems))
+      }))
+    }
+然后将数据遍历添加等级level标识
+然后目录列表加入scroll组件进行章节的上下滑动
+使用item.level进行判断章节的缩进 marginLeft: `${px2rem(item.level * 15)}rem`
+点击章节执行displayContent切换章节
+        }
  -->
