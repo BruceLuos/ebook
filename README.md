@@ -206,9 +206,25 @@ function flatten2(array) {
         return [].concat(item, ...flatten2(item.subitems))
       }))
     }
+    }
 然后将数据遍历添加等级level标识
 然后目录列表加入scroll组件进行章节的上下滑动
 使用item.level进行判断章节的缩进 marginLeft: `${px2rem(item.level * 15)}rem`
 点击章节执行displayContent切换章节
-        }
+
+
+全文搜索功能实现
+官方的全文搜索算法
+ doSearch(q) {
+        return Promise.all(
+          this.currentBook.spine.spineItems.map(
+            section => section.load(this.currentBook.load.bind(this.currentBook))
+              .then(section.find.bind(section, q))
+              .finally(section.unload.bind(section)))
+        ).then(results => 
+        二维数组转为一维数组
+        Promise.resolve([].concat.apply([], results)))
+      },
+再引入一个scroll为搜索列表滚动
+里面遍历展示搜索内容
  -->
