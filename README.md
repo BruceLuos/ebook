@@ -239,6 +239,8 @@ this.currentBook.rendition.annotations.highlight(target)
 书签组件实现
 目录和书签组件切换的过程中会有一个动画组件
 
-
-
+动画实现
+通过绑定在line和mask的div的属性
+获取index，修改maskWidth和lineWidth数组中的value
+从而改变line和mask中线的长度
  -->

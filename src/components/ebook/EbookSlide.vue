@@ -4,7 +4,7 @@
     <transition name="slide-right">
   <!-- 左侧目录 -->
     <div class="content" v-if="settingVisible === 3">
-      <div class="content-page-wrapper" v-if="!bookAvailable">
+      <div class="content-page-wrapper" v-if="bookAvailable">
         <!-- 内容列表 动态组件-->
         <div class="content-page">
            <component :is="currentTab === 1 ? content : bookmark"></component>
