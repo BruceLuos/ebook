@@ -243,4 +243,6 @@ this.currentBook.rendition.annotations.highlight(target)
 通过绑定在line和mask的div的属性
 获取index，修改maskWidth和lineWidth数组中的value
 从而改变line和mask中线的长度
+
+在reader中引入组件mask用来调用各种touch事件
  -->

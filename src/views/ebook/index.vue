@@ -1,5 +1,5 @@
 <template>
-<div class='ebook'>
+<div class='ebook' ref="ebook">
   <ebook-title></ebook-title>
   <ebook-reader></ebook-reader>
   <ebook-menu></ebook-menu>
@@ -19,7 +19,29 @@ export default {
     EbookTitle,
     EbookMenu
   },
+   watch: {
+      offsetY(v) {
+        if (!this.menuVisible && this.bookAvailable) {
+          if (v > 0) {
+            this.move(v)
+          } else if (v === 0) {
+            this.restore()
+          }
+        }
+      }
+    },
   methods: {
+    // 清除移动
+    restore() {
+        this.$refs.ebook.style.top = 0
+        this.$refs.ebook.style.transition = 'all .2s linear'
+        setTimeout(() => {
+          this.$refs.ebook.style.transition = ''
+        }, 200)
+      },
+      move(v) {
+        this.$refs.ebook.style.top = v + 'px'
+      },
     // 记录时间
     startLoopReadTime () {
         let readTime = getReadTime(this.fileName)
@@ -48,6 +70,7 @@ export default {
 </script>
 <style lang='scss' scoped>
 @import "../../assets/styles/global";
+// 为阅读器添加绝对布局让reader中的蒙版相对他布局
 .ebook {
     position: absolute;
     top: 0;
