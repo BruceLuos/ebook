@@ -234,4 +234,11 @@ function flatten2(array) {
 
 点击搜索内容跳转到书籍对应的内容并对章节中的关键字进行高亮
 this.currentBook.rendition.annotations.highlight(target)
+
+
+书签组件实现
+目录和书签组件切换的过程中会有一个动画组件
+
+
+
  -->

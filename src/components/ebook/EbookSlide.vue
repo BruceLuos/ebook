@@ -4,7 +4,7 @@
     <transition name="slide-right">
   <!-- 左侧目录 -->
     <div class="content" v-if="settingVisible === 3">
-      <div class="content-page-wrapper">
+      <div class="content-page-wrapper" v-if="!bookAvailable">
         <!-- 内容列表 动态组件-->
         <div class="content-page">
            <component :is="currentTab === 1 ? content : bookmark"></component>
@@ -14,14 +14,20 @@
           <div class="content-page-tab-item"
                    :class="{'selected': currentTab === 1}"
                    @click="selectTab(1)">
+                   <!-- 目录名字的国际化 -->
                 {{$t('book.navigation')}}
               </div>
               <div class="content-page-tab-item"
                    :class="{'selected': currentTab === 2}"
                    @click="selectTab(2)">
+                   <!-- 书签名字的国际化 -->
                 {{$t('book.bookmark')}}
               </div>
         </div>
+      </div>
+      <!-- 书籍没解析完时展示的过渡动画组件 -->
+      <div class="content-empty" v-else>
+            <ebook-loading></ebook-loading>
       </div>
     </div>
     </transition>
@@ -35,9 +41,12 @@
 import { ebookMixin } from '../../utils/mixin'
 import EbookSlideContents from './EbookSlideContents'
 import EbookSlideBookmark from './EbookSlideBookmark'
-
+import EbookLoading from './EbookLoading'
 export default {
   mixins: [ebookMixin],
+  components: {
+    EbookLoading
+  },
   data() {
       return {
         // 选择标识符
@@ -92,6 +101,11 @@ export default {
           }
       }
     }
+    .content-empty {
+        width: 100%;
+        height: 100%;
+        @include center;
+      }
   }
   .content-bg{
     flex: 0 0 15%;
