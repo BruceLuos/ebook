@@ -94,9 +94,11 @@ export default {
             this.searchList = list
             console.log(this.searchList)
             this.searchList.map(item => {
+              // 为item添加一个excerpt属性将搜索内容searchText代替为html方便添加样式
+              // 效果搜索关键字高亮
               item.excerpt = item.excerpt.replace(this.searchText, `<span class="content-search-text">${this.searchText}</span>`)
               return item
-              console.log(item)
+              // console.log(item)
             })
           })
         }
@@ -110,16 +112,20 @@ export default {
               .finally(section.unload.bind(section)))
         ).then(results => Promise.resolve([].concat.apply([], results)))
       },
+      // 点击展示内容并对章节中的关键字进行高亮
     displayContent(target, highlight = false) {
         this.display(target, () => {
           this.hideTitleAndMenu()
           if (highlight) {
+            // annotations管理高亮内容
             this.currentBook.rendition.annotations.highlight(target)
           }
         })
       },
+      // 分级缩进，根据item.level进行判断等级
     contentItemStyle(item) {
         return {
+          //1*15 2*15
           marginLeft: `${px2rem(item.level * 15)}rem`
         }
       },

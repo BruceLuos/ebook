@@ -227,4 +227,11 @@ function flatten2(array) {
       },
 再引入一个scroll为搜索列表滚动
 里面遍历展示搜索内容
+
+高亮搜索内容关键字
+将搜索出来的内容列表遍历添加新属性切换为带样式的html代码
+ item.excerpt = item.excerpt.replace(this.searchText, `<span class="content-search-text">${this.searchText}</span>`)
+
+点击搜索内容跳转到书籍对应的内容并对章节中的关键字进行高亮
+this.currentBook.rendition.annotations.highlight(target)
  -->
