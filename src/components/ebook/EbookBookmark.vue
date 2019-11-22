@@ -29,9 +29,11 @@
       height() {
         return realPx(35)
       },
+      // 下拉的阈值
       threshold() {
         return realPx(55)
       },
+      // 加入书签后的书签的位置布局
       fixedStyle() {
         return {
           position: 'fixed',
@@ -42,16 +44,21 @@
     },
     watch: {
       offsetY(v) {
+        // 在书籍解析完后才能进行下拉书签
         if (!this.bookAvailable || this.menuVisible || this.settingVisible >= 0) {
           return
         }
         if (v >= this.height && v < this.threshold) {
+          // 状态二
           this.beforeThreshold(v)
         } else if (v >= this.threshold) {
+          // 状态三
           this.afterThreshold(v)
         } else if (v > 0 && v < this.height) {
+          // 状态1：未超过书签的高度
           this.beforeHeight()
         } else if (v === 0) {
+          // 状态四 书签 归位
           this.restore()
         }
       },
@@ -68,10 +75,12 @@
       return {
         text: '',
         color: WHITE,
+        // 判断是否书签是就重新布局书签位置
         isFixed: false
       }
     },
     methods: {
+      // 添加书签，缓存，记录书籍状态
       addBookmark() {
         this.bookmark = getBookmark(this.fileName)
         if (!this.bookmark) {
@@ -127,7 +136,7 @@
         }
       },
       beforeThreshold(v) {
-        // 状态2：未到达零界状态
+        // 状态2：未到达零界状态 保持原来的状态
         this.$refs.bookmark.style.top = `${-v}px`
         this.beforeHeight()
         const iconDown = this.$refs.iconDown
@@ -136,7 +145,7 @@
         }
       },
       afterThreshold(v) {
-        // 状态3：超越零界状态
+        // 状态3：超越零界状态 切换图标颜色,提示文字，布局，旋转图标
         this.$refs.bookmark.style.top = `${-v}px`
         if (this.isBookmark) {
           this.text = this.$t('book.releaseDeleteMark')
