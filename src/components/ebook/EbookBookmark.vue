@@ -62,9 +62,12 @@
           this.restore()
         }
       },
+      // 获取缓存中的isBookmark
+      // 判断当前页面是否加入书签
       isBookmark(isBookmark) {
         this.isFixed = isBookmark
         if (isBookmark) {
+          // 修改书签颜色
           this.color = BLUE
         } else {
           this.color = WHITE
@@ -82,17 +85,26 @@
     methods: {
       // 添加书签，缓存，记录书籍状态
       addBookmark() {
+        // 从缓存中获取书签
         this.bookmark = getBookmark(this.fileName)
+        // 不存在书签就初始化书签数组
         if (!this.bookmark) {
           this.bookmark = []
         }
         const currentLocation = this.currentBook.rendition.currentLocation()
+        // 获取cfi中前半部分内容
         const cfibase = currentLocation.start.cfi.replace(/!.*/, '')
+        // 获取start中！后面的内容
         const cfistart = currentLocation.start.cfi.replace(/.*!/, '').replace(/\)$/, '')
+        // 获取end中！后面的内容
         const cfiend = currentLocation.end.cfi.replace(/.*!/, '').replace(/\)$/, '')
+        // 拼接上面内容
         const cfirange = `${cfibase}!,${cfistart},${cfiend})`
+        // 获取拼接内容的范围
         this.currentBook.getRange(cfirange).then(range => {
+          // 获取到这个范围的文本并去除多余的空格
           const text = range.toString().replace(/\s\s/g, '')
+          // 书签数组中添加信息
           this.bookmark.push({
             cfi: currentLocation.start.cfi,
             text: text
@@ -100,11 +112,13 @@
           saveBookmark(this.fileName, this.bookmark)
         })
       },
+      // 删除书签
       removeBookmark() {
         const currentLocation = this.currentBook.rendition.currentLocation()
         const cfi = currentLocation.start.cfi
         this.bookmark = getBookmark(this.fileName)
         if (this.bookmark) {
+          // 过滤掉已存储的书签
           saveBookmark(this.fileName, this.bookmark.filter(item => item.cfi !== cfi))
           this.setIsBookmark(false)
         }

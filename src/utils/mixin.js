@@ -98,6 +98,7 @@ export const ebookMixin = {
         this.setSection(currentLocation.start.index)
         // 缓存章节进度
         saveLocation(this.fileName, startCfi)
+        // 判断书签是否存在修改书签状态
         const bookmark = getBookmark(this.fileName)
         if (bookmark) {
           if (bookmark.some(item => item.cfi === startCfi)) {
