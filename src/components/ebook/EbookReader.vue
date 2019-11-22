@@ -67,9 +67,11 @@ export default {
         e.preventDefault()
         e.stopPropagation()
       },
+      // 手指移动时
       move(e) {
         let offsetY = 0
         if (this.firstOffsetY) {
+          // 移动的偏差
           offsetY = e.changedTouches[0].clientY - this.firstOffsetY
           this.setOffsetY(offsetY)
         } else {
@@ -78,6 +80,7 @@ export default {
         e.preventDefault()
         e.stopPropagation()
       },
+      // 移动结束,还原偏移量
       moveEnd(e) {
         this.setOffsetY(0)
         this.firstOffsetY = null

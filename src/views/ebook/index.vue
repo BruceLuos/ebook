@@ -3,6 +3,7 @@
   <ebook-title></ebook-title>
   <ebook-reader></ebook-reader>
   <ebook-menu></ebook-menu>
+  <ebook-bookmark></ebook-bookmark>
 </div>
 </template>
 
@@ -10,6 +11,7 @@
 import EbookReader from '../../components/ebook/EbookReader'
 import EbookTitle from '../../components/ebook/EbookTitle'
 import EbookMenu from '../../components/ebook/EbookMenu'
+import EbookBookmark from '../../components/ebook/EbookBookmark'
 import { getReadTime, saveReadTime } from '../../utils/localStorage'
 import { ebookMixin } from '../../utils/mixin'
 export default {
@@ -17,9 +19,11 @@ export default {
   components: {
     EbookReader,
     EbookTitle,
-    EbookMenu
+    EbookMenu,
+    EbookBookmark
   },
    watch: {
+    //  监听reader中的mask中的offsetY
       offsetY(v) {
         if (!this.menuVisible && this.bookAvailable) {
           if (v > 0) {
@@ -33,6 +37,7 @@ export default {
   methods: {
     // 清除移动
     restore() {
+      // 绑定ebook修改top属性
         this.$refs.ebook.style.top = 0
         this.$refs.ebook.style.transition = 'all .2s linear'
         setTimeout(() => {

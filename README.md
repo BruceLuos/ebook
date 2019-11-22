@@ -236,8 +236,8 @@ function flatten2(array) {
 this.currentBook.rendition.annotations.highlight(target)
 
 
-书签组件实现
-目录和书签组件切换的过程中会有一个动画组件
+书签目录组件实现
+目录和书签目录组件切换的过程中会有一个动画组件
 
 动画实现
 通过绑定在line和mask的div的属性
@@ -245,4 +245,9 @@ this.currentBook.rendition.annotations.highlight(target)
 从而改变line和mask中线的长度
 
 在reader中引入组件mask用来调用各种touch事件
+index.vue监听offsetY属性
+从而拉动ebook整个组件向下
+
+书签组件实现
+设置书签组件top为-35,eook下拉时显示书签组件
  -->

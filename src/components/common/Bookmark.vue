@@ -6,6 +6,7 @@
   import { px2rem } from '../../utils/utils'
 
   export default {
+    // 设置书签的长宽和颜色
     props: {
       width: Number,
       height: Number,
