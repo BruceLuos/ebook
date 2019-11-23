@@ -31,14 +31,20 @@ export default {
       // 2 - 鼠标进入后的移动
       // 3 - 鼠标从移动状态松手
       // 4 - 鼠标还原
+
+      // 鼠标抬起
       onMouseEnd(e) {
         if (this.mouseState === 2) {
+          // 鼠标抬起时归零偏移量
           this.setOffsetY(0)
           this.firstOffsetY = null
           this.mouseState = 3
         } else {
           this.mouseState = 4
         }
+        // 为了防止误碰触发状态三导致延迟
+        // 检查鼠标点击间隔时间，小于这个时间则触发正常的点击事件
+        // e.timestamp是指当前时间
         const time = e.timeStamp - this.mouseStartTime
         if (time < 100) {
           this.mouseState = 4
@@ -46,12 +52,14 @@ export default {
         e.preventDefault()
         e.stopPropagation()
       },
+      // 鼠标移动时
       onMouseMove(e) {
         if (this.mouseState === 1) {
           this.mouseState = 2
         } else if (this.mouseState === 2) {
           let offsetY = 0
           if (this.firstOffsetY) {
+            // 获取鼠标移动偏移量
             offsetY = e.clientY - this.firstOffsetY
             this.setOffsetY(offsetY)
           } else {
@@ -61,7 +69,9 @@ export default {
         e.preventDefault()
         e.stopPropagation()
       },
+      // 点击鼠标开始
       onMouseEnter(e) {
+        // 点击鼠标设为状态1，获取当前点击时间
         this.mouseState = 1
         this.mouseStartTime = e.timeStamp
         e.preventDefault()
