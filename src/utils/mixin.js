@@ -38,6 +38,7 @@ export const ebookMixin = {
         const sectionInfo = this.currentBook.section(this.section)
         // 获取当前章节名
         if (sectionInfo && sectionInfo.href && this.currentBook && this.currentBook.navigation) {
+          console.log(this.currentBook.navigation)
           return this.currentBook.navigation.get(sectionInfo.href).label
         }
         return ''

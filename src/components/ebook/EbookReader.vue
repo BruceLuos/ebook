@@ -96,6 +96,7 @@ export default {
         this.firstOffsetY = null
       },
       onMaskClick(e) {
+        // 移动事件忽略掉
         if (this.mouseState && (this.mouseState === 2 || this.mouseState === 3)) {
           return
         }
@@ -283,14 +284,19 @@ export default {
       this.book.ready.then(() => {
           return this.book.locations.generate(750 * (window.innerWidth / 375) * (getFontSize(this.fileName) / 16))
         }).then(locations => {
+          // console.log(locations)
+          // 根据数据结构看出location哪些页数是属于navigation中章节
           this.navigation.forEach(nav => {
             nav.pagelist = []
           })
           locations.forEach(item => {
             const loc = item.match(/\[(.*)\]!/)[1]
+            // console.log(loc)
             this.navigation.forEach(nav => {
               if (nav.href) {
                 const href = nav.href.match(/^(.*)\.html$/)[1]
+                // console.log(href)
+                // 根据locations和navigation中过滤数据中相同名字的数据加入pagelist
                 if (href === loc) {
                   nav.pagelist.push(item)
                 }
@@ -298,11 +304,14 @@ export default {
             })
             let currentPage = 1
             this.navigation.forEach((nav, index) => {
+              // 封面时页数为1
               if (index === 0) {
+                // 初始化当前页数为1
                 nav.page = 1
               } else {
                 nav.page = currentPage
               }
+              // 当前页数
               currentPage += nav.pagelist.length + 1
             })
           })
