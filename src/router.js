@@ -6,7 +6,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/ebook'
+      redirect: '/book-store'
     },
     {
       path: '/ebook',
@@ -14,6 +14,15 @@ export default new Router({
       children: [{
         path: ':fileName',
         component: () => import('./components/ebook/EbookReader.vue')
+      }]
+    },
+    {
+      path: '/book-store',
+      component: () => import('./views/store/index.vue'),
+      redirect: '/book-store/home',
+      children: [{
+        path: 'home',
+        component: () => import('./views/store/bookHome.vue')
       }]
     }
   ]

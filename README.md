@@ -267,4 +267,9 @@ refreshLocation中也要更新判断书签是否存在修改书签状态
 根据数据结构看出location哪些页数是属于navigation中章节
 相同名字加入pagelist中，pagelist长度加一则为当前页数
 初始化封面为第一页
+
+
+
+书城首页、搜索页、列表页和详情页的开发
+
  -->
