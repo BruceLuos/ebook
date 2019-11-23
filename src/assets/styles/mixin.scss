@@ -99,17 +99,14 @@ $ratio: 375 / 10;
   white-space: nowrap;
 }
 
-// 换行
 @mixin ellipsis2($line) {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: $line;
   word-break: keep-all;
-  // 连续的空白符会被合并，换行符会被当作空白符来处理。填充line盒子时，必要的话会换行。
   white-space: normal;
   overflow: hidden;
   text-overflow: ellipsis;
-  // 表示如果行内没有多余的地方容纳该单词到结尾，则那些正常的不能被分割的单词会被强制分割换行。
   overflow-wrap: break-word;
 }
 
@@ -206,4 +203,15 @@ $homeAnimationTime: .2s;
 
 .opacity-slide-up-enter-active, .opacity-slide-up-leave-active {
   transition: all .2s linear;
+}
+
+.icon{
+  color:#666;
+  font-size: px2rem(16);
+}
+
+.title{
+  color:#666;
+  font-size: px2rem(16);
+  font-weight: bold;
 }

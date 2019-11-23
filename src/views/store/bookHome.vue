@@ -1,11 +1,15 @@
 <template>
-<div class='book-home'>111</div>
+<div class='book-home'>
+  <search-bar></search-bar>
+</div>
 </template>
 
 <script>
-
+import SearchBar from '../../components/home/searchBar'
 export default {
-
+  components: {
+    SearchBar
+  }
 }
 </script>
 <style lang='scss' scoped>
