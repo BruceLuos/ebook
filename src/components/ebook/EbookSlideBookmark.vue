@@ -2,6 +2,7 @@
   <div class="ebook-slide-bookmark">
     <div class="slide-bookmark-title">{{$t('book.bookmark')}} · {{bookmark ? bookmark.length : 0}}</div>
     <scroll class="slide-bookmark-list" :top="48" :bottom="48">
+      <!-- 遍历书签数组里的内容 -->
       <div class="slide-bookmark-item" v-for="(item, index) in bookmark" :key="index" @click="displayBookmark(item.cfi)">
         <div class="slide-bookmark-item-icon">
           <div class="icon-bookmark"></div>
@@ -77,6 +78,7 @@
           font-size: px2rem(14);
           line-height: px2rem(15);
           max-height: px2rem(45);
+          // 显示为三行
           @include ellipsis2(3);
         }
       }

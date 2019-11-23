@@ -200,7 +200,8 @@ export default {
        // 绑定dom read进行书籍的渲染
       this.rendition = this.book.renderTo('read', {
         width: window.innerWidth,
-        height: window.innerHeight
+        height: window.innerHeight,
+        method: 'default'
       })
       // 展示电子书  在这过程中获取存储在localstorage中的字体属性
       const location = getLocation(this.fileName)
