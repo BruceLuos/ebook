@@ -1,49 +1,166 @@
 <template>
   <div class="search-bar-wrapper" >
-      <div class="title-search-wrapper" :class="{'show-search': ifShowSearchPage}" ref="titleSearchWrapper">
+      <div class="title-search-wrapper" :class="{'show-search': ifShowSearchPage, 'hide-shadow': ifHideShadow}" ref="titleSearchWrapper">
         <!-- 顶部标题的显示 -->
-      <transition name="title">
-        <div class="title-search-page-wrapper" v-show="!ifShowSearchPage">
-          <span class="title-text title">{{$t('home.title')}}</span>
-          <div class="icon-shake-wrapper">
-            <span class="icon-shake icon"></span>
+        <transition name="title">
+          <div class="title-search-page-wrapper" v-show="!ifShowSearchPage">
+            <span class="title-text title">{{$t('home.title')}}</span>
+            <div class="icon-shake-wrapper">
+              <span class="icon-shake icon"></span>
+            </div>
+          </div>
+        </transition>
+        <!-- 返回图标  -->
+        <div class="icon-back-wrapper" :class="{'show-search': ifShowSearchPage}" @click="back">
+          <span class="icon-back icon"></span>
+        </div>
+        <!-- 搜索框 -->
+        <div class="search-wrapper" :class="{'show-search': ifShowSearchPage}">
+          <div class="search-back-wrapper" :class="{'show-search': ifShowSearchPage}">
+            <span class="icon-back icon" :class="{'show-search': ifShowSearchPage}"></span>
+          </div>
+          <div class="search-bg">
+            <span class="icon-search icon"></span>
+            <input type="text" class="search" :placeholder="$t('home.hint')" v-model="searchText" @click="showSearchPageAndHotSearch">
           </div>
         </div>
+      </div>
+      <!-- 搜索详情页热区 -->
+      <transition name="host-search">
+        <div class="hot-search-wrapper" v-if="ifShowSearchPage && ifShowHotSearch" ref="searchMaskWrapper">
+          <hot-search :label="$t('home.hotSearch')"
+                      :btn="$t('home.change')"
+                      :hotSearch="searchList.hotSearch"></hot-search>
+          <div class="line"></div>
+          <hot-search :label="$t('home.historySearch')"
+                      :btn="$t('home.clear')"
+                      :hotSearch="searchList.historySearch"></hot-search>
+        </div>
       </transition>
-      <!-- 返回图标 -->
-      <div class="icon-back-wrapper" :class="{'show-search': ifShowSearchPage}" >
-        <span class="icon-back icon"></span>
-      </div>
-      <!-- 搜索框 -->
-      <div class="search-wrapper" :class="{'show-search': ifShowSearchPage}">
-        <div class="search-back-wrapper" :class="{'show-search': ifShowSearchPage}">
-          <span class="icon-back icon" :class="{'show-search': ifShowSearchPage}"></span>
-        </div>
-        <div class="search-bg">
-          <span class="icon-search icon"></span>
-          <input type="text" class="search" :placeholder="$t('home.hint')" v-model="searchText">
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
 import {storeHomeMixin} from '../../utils/mixin'
+import { realPx } from '@/utils/utils'
+import HotSearch from '@/components/home/hotSearch'
 export default {
+  components: {
+    HotSearch
+  },
   mixins: [storeHomeMixin],
   data () {
     return {
-      searchText: null,
-      ifShowSearchPage: true
+       searchList: {
+          hotSearch: [
+            {
+              type: 1,
+              text: 'Self-Reported Population Health',
+              num: '1.8万'
+            },
+            {
+              type: 1,
+              text: 'Library and Information Sciences',
+              num: '1.1万'
+            },
+            {
+              type: 1,
+              text: 'Global Business Strategy',
+              num: '1.3万'
+            },
+            {
+              type: 1,
+              text: 'Corporate Data Quality',
+              num: '1.0万'
+            },
+            {
+              type: 1,
+              text: 'Verrechnungspreise',
+              num: '3.9万'
+            }
+          ],
+          historySearch: [
+            {
+              type: 2,
+              text: 'Computer Science'
+            },
+            {
+              type: 1,
+              text: 'Building the Infrastructure for Cloud Security'
+            },
+            {
+              type: 2,
+              text: 'ePub'
+            },
+            {
+              type: 2,
+              text: 'api'
+            },
+            {
+              type: 2,
+              text: 'Vue.js'
+            },
+            {
+              type: 2,
+              text: 'Nginx'
+            },
+            {
+              type: 2,
+              text: 'Java'
+            },
+            {
+              type: 2,
+              text: 'hdfs'
+            },
+            {
+              type: 2,
+              text: 'vuejs'
+            },
+            {
+              type: 2,
+              text: 'es6'
+            },
+            {
+              type: 2,
+              text: 'Intel'
+            },
+            {
+              type: 1,
+              text: 'Pro Git'
+            },
+            {
+              type: 2,
+              text: 'imooc'
+            },
+            {
+              type: 2,
+              text: 'Education'
+            },
+            {
+              type: 2,
+              text: 'Springer'
+            },
+            {
+              type: 2,
+              text: 'Environment'
+            }
+          ]
+        },
+        searchText: null,
+        ifShowSearchPage: false,
+        ifHideShadow: true,
+        ifShowHotSearch: false
     }
   },
   watch:{
     offsetY(offsetY){
       if (offsetY > 0) {
-        this.hideTitle()
-      } else {
         this.showTitle()
+        this.hideShadow()
+      } else {
+        this.hideTitle()
+        this.showShadow()
+
       }
     }
   },
@@ -53,7 +170,48 @@ export default {
     },
     showTitle() {
       this.ifShowSearchPage = true
-    }
+    },
+    showHotSearch(){
+      this.ifShowHotSearch = false
+    },
+     hideHotSearch() {
+        this.ifShowHotSearch = false
+        if(this.offsetY > 0){
+          this.showTitle()
+          this.hideShadow()
+
+        } else {
+          this.hideTitle()
+          this.showShadow()
+        }
+      },
+      showShadow() {
+        this.ifHideShadow = false
+      },
+      hideShadow() {
+        this.ifHideShadow = true
+      },
+      hideSearchPage() {
+        this.ifShowSearchPage = false
+        this.ifHideShadow = true
+      },
+      showSearchPage() {
+         this.ifShowSearchPage = true
+      },
+      back() {
+        this.searchText = ''
+        this.showShadow()
+        this.hideSearchPage()
+        this.hideHotSearch()
+      },
+      showSearchPageAndHotSearch() {
+        this.showSearchPage()
+        this.hideShadow()
+        this.ifShowHotSearch = true
+        this.$nextTick(() => {
+          // this.initHotSearch()
+        })
+      }
   },
 }
 </script>

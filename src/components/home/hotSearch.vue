@@ -6,10 +6,12 @@
     </div>
     <div class="hot-search-list">
       <div class="hot-search-item" v-for="(item, index) in hotSearch" :key="index">
+       <!-- 遍历图标 -->
         <div class="icon-wrapper">
           <span class="icon-book icon" v-if="item.type === 1"></span>
           <span class="icon-search icon" v-if="item.type === 2"></span>
         </div>
+        <!-- 遍历内容 -->
         <div class="hot-search-text-wrapper">
           <div class="text" ref="searchText">{{item.text}}</div>
           <div class="num" v-if="item.num">{{item.num}}人搜索</div>
