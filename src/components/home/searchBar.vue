@@ -5,7 +5,7 @@
         <transition name="title">
           <div class="title-search-page-wrapper" v-show="!ifShowSearchPage">
             <span class="title-text title">{{$t('home.title')}}</span>
-            <div class="icon-shake-wrapper">
+            <div class="icon-shake-wrapper" @click="showFlapCard">
               <span class="icon-shake icon"></span>
             </div>
           </div>
@@ -165,6 +165,9 @@ export default {
     }
   },
   methods: {
+    showFlapCard() {
+      this.setFlapCardVisible(true)
+    },
     hideTitle() {
       this.ifShowSearchPage = false
     },
