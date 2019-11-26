@@ -29,9 +29,20 @@ export default {
       intervalTime: 25
     }
   },
+  watch: {
+    // 监听flapCardVisible发生变化时展示和隐藏卡片动画
+    flapCardVisible(v) {
+      if(v){
+        this.startFlapCardAnimation()
+      }
+    }
+
+
+  },
   methods: {
     close () {
       this.setFlapCardVisible(false)
+      this.stopFlapCardAnimation()
     },
     // 将卡片样式与数组绑定在一起，方便管理
     semiCircleStyle(item, dir) {
@@ -59,6 +70,7 @@ export default {
     },
     // 卡片旋转
     flapCardRotate () {
+      // 获取背面和正面的卡片数据进行变化
       const frontFlapCard = this.flapCardList[this.front]
       const backFlapCard = this.flapCardList[this.back]
       frontFlapCard.rotateDegree += 10
@@ -119,17 +131,35 @@ export default {
       backFlapCard._g = backFlapCard.g - 5*9
       this.rotate(this.back,'back')
     },
+    // 重置动画
+    reset () {
+      this.front = 0
+      this.back = 1
+      this.flapCardList.forEach((item, index) => {
+        item.zIndex = 100-index
+        item._g = item.g
+        item.rotateDegree = 0
+        this.rotate(index, 'front')
+        this.rotate(index, 'back')
+      })
+    },
     // 执行卡片动画
     startFlapCardAnimation () {
       // 所以要初始化后面左半部分的旋转角度
         this.prepare()
-      setInterval(() => {
+      this.task = setInterval(() => {
         this.flapCardRotate()
       },this.intervalTime)
+    },
+    // 停止卡片动画
+    stopFlapCardAnimation () {
+      // 清除定时任务
+      if(this.task) {
+        clearInterval(this.task)
+      }
+      console.log('h')
+      this.reset()
     }
-  },
-  mounted () {
-    this.startFlapCardAnimation()
   }
 }
 </script>

@@ -51,7 +51,7 @@ export default {
     // 获得scroll传来的offsetY将他存储到vuex中已便searchBar组件的使用
     onScroll(offsetY) {
       this.setOffsetY(offsetY)
-      console.log(offsetY)
+      // console.log(offsetY)
     }
   },
 }

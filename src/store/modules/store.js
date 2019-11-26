@@ -1,7 +1,7 @@
 const store = {
   state: {
     hostSearchOffsetY: 0,
-    flapCardVisible: true
+    flapCardVisible: false
   },
   mutations: {
     SET_HOT_SEARCH_OFFSETY (state, offsetY) {
