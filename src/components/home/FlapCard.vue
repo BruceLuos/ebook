@@ -3,8 +3,10 @@
   <div class="flap-card-bg">
     <div class="flap-card" v-for="(item, index) in flapCardList" :key="index" :style="{zIndex: item.zIndex}">
       <div class="flap-card-circle">
-        <div class="flap-card-semi-circle flap-card-semi-circle-left" :style="semiCircleStyle(item, 'left')"></div>
-        <div class="flap-card-semi-circle flap-card-semi-circle-right" :style="semiCircleStyle(item, 'right')"></div>
+        <div class="flap-card-semi-circle flap-card-semi-circle-left"
+        :style="semiCircleStyle(item, 'left')" ref="left"></div>
+        <div class="flap-card-semi-circle flap-card-semi-circle-right"
+        :style="semiCircleStyle(item, 'right')" ref="right"></div>
       </div>
     </div>
   </div>
@@ -21,11 +23,14 @@ export default {
   mixins:[storeHomeMixin],
   data() {
     return {
-      flapCardList
+      flapCardList,
+      front:0,
+      back:1,
+      intervalTime: 25
     }
   },
   methods: {
-    close() {
+    close () {
       this.setFlapCardVisible(false)
     },
     // 将卡片样式与数组绑定在一起，方便管理
@@ -35,8 +40,97 @@ export default {
         backgroundSize: item.backgroundSize,
         backgroundImage: dir === 'left' ? item.imgLeft : item.imgRight
       }
+    },
+    // 卡片旋转
+    rotate (index, type) {
+      // 获取对应index的数据
+      const item = this.flapCardList[index]
+      let dom
+      if(type === 'front') {
+        // 正面的话就是右边的某一半卡片
+        dom = this.$refs.right[index]
+      } else {
+        // 背面的左边的某一半卡片
+        dom = this.$refs.left[index]
+      }
+      // 获取到dom后进行翻转
+      dom.style.transform = `rotateY(${item.rotateDegree}deg)`
+      dom.style.backgroundColor = `rgb(${item.r},${item._g},${item.b})`
+    },
+    // 卡片旋转
+    flapCardRotate () {
+      const frontFlapCard = this.flapCardList[this.front]
+      const backFlapCard = this.flapCardList[this.back]
+      frontFlapCard.rotateDegree += 10
+      frontFlapCard._g -= 5
+      backFlapCard.rotateDegree -=10
+      if(backFlapCard.rotateDegree < 90){
+        // 转90度之前让背面卡片颜色加深
+        backFlapCard._g += 5
+      }
+      // 这样目前只能看到前面右半部分的旋转
+      // 所以要初始化后面左半部分的旋转角度,然后才能满足以下条件让背面显示出来
+      if (frontFlapCard.rotateDegree === 90 && backFlapCard.rotateDegree === 90) {
+        backFlapCard.zIndex += 2
+      }
+      // 当转完180度时需要切换下一张卡片
+      if (frontFlapCard.rotateDegree === 180 && backFlapCard.rotateDegree === 0) {
+        this.next()
+      }
+      this.rotate(this.front,'front')
+      this.rotate(this.back,'back')
+    },
+    // 切换下一张卡片
+    next () {
+      const frontFlapCard = this.flapCardList[this.front]
+      const backFlapCard = this.flapCardList[this.back]
+      // 需要将之前转动的角度还原
+      frontFlapCard.rotateDegree = 0
+      backFlapCard.rotateDegree = 0
+      frontFlapCard._g = frontFlapCard.g
+      backFlapCard._g = backFlapCard.g
+      this.rotate(this.front,'front')
+      this.rotate(this.back,'back')
+      // 指向下一个卡片
+      this.front++
+      this.back++
+      let len = this.flapCardList.length
+      if(this.front >= len) {
+        this.front = 0
+      }
+      if(this.back >= len) {
+        this.back = 0
+      }
+      // 同时也需要动态修改他们z-index才会切换
+      // 100 => 96
+      // 96 => 97
+      this.flapCardList.forEach((item, index) => {
+       item.zIndex = 100-((index - this.front + len) % len)
+      })
+      // 再一次初始化背面卡片
+      this.prepare()
+
+    },
+    // 初始化背面卡片
+    prepare () {
+      const backFlapCard = this.flapCardList[this.back]
+      backFlapCard.rotateDegree = 180
+      //让背面卡片颜色先变浅
+      backFlapCard._g = backFlapCard.g - 5*9
+      this.rotate(this.back,'back')
+    },
+    // 执行卡片动画
+    startFlapCardAnimation () {
+      // 所以要初始化后面左半部分的旋转角度
+        this.prepare()
+      setInterval(() => {
+        this.flapCardRotate()
+      },this.intervalTime)
     }
   },
+  mounted () {
+    this.startFlapCardAnimation()
+  }
 }
 </script>
 <style lang='scss' scoped>
