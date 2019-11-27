@@ -1,15 +1,23 @@
 <template>
 <div class='flap-card-wrapper' v-show="flapCardVisible">
-  <div class="flap-card-bg">
+  <div class="flap-card-bg" :class="{'animation': runFlapCardAnimation}">
+    <!-- 卡片 -->
     <div class="flap-card" v-for="(item, index) in flapCardList" :key="index" :style="{zIndex: item.zIndex}">
       <div class="flap-card-circle">
+        <!-- 左边一半的卡片和右边一半的卡片 -->
         <div class="flap-card-semi-circle flap-card-semi-circle-left"
         :style="semiCircleStyle(item, 'left')" ref="left"></div>
         <div class="flap-card-semi-circle flap-card-semi-circle-right"
         :style="semiCircleStyle(item, 'right')" ref="right"></div>
       </div>
     </div>
+    <!-- 小球 -->
+    <div class="point-wrapper">
+        <div class="point" :class="{'animation': runPointAnimation}" v-for="(item, index) in pointList"
+             :key="index"></div>
+      </div>
   </div>
+  <!-- 关闭 -->
   <div class="close-btn-wrapper" @click="close">
     <div class="icon-close" ></div>
   </div>
@@ -26,14 +34,17 @@ export default {
       flapCardList,
       front:0,
       back:1,
-      intervalTime: 25
+      intervalTime: 25,
+      runFlapCardAnimation:false,
+      pointList: null,
+      runPointAnimation: false
     }
   },
   watch: {
     // 监听flapCardVisible发生变化时展示和隐藏卡片动画
     flapCardVisible(v) {
-      if(v){
-        this.startFlapCardAnimation()
+      if (v) {
+        this.startAinmation()
       }
     }
 
@@ -143,6 +154,16 @@ export default {
         this.rotate(index, 'back')
       })
     },
+    // 执行小球动画
+    startPointAnimation () {
+      this.runPointAnimation = true
+      // 在动画执行完后停止动画
+      // 去除clas animation
+      setTimeout(() => {
+        this.runPointAnimation = false
+        console.log('750')
+      },750);
+    },
     // 执行卡片动画
     startFlapCardAnimation () {
       // 所以要初始化后面左半部分的旋转角度
@@ -150,6 +171,10 @@ export default {
       this.task = setInterval(() => {
         this.flapCardRotate()
       },this.intervalTime)
+      // 执行一定时间后将卡片隐藏
+      setTimeout(() => {
+        this.stopAnimation()
+      }, 2500);
     },
     // 停止卡片动画
     stopFlapCardAnimation () {
@@ -159,12 +184,34 @@ export default {
       }
       console.log('h')
       this.reset()
+    },
+    // 开始动画
+    startAinmation () {
+      this.runFlapCardAnimation = true
+      setTimeout(() => {
+        this.startFlapCardAnimation()
+        this.startPointAnimation()
+        console.log('300')
+      },300)
+    },
+    stopAnimation () {
+      this.runFlapCardAnimation = false
+      if(this.task) {
+        clearInterval(this.task)
+      }
+    }
+  },
+  created() {
+    this.pointList = []
+    for (let i = 0; i<18; i++){
+      this.pointList.push(`point${i}`)
     }
   }
 }
 </script>
 <style lang='scss' scoped>
 @import "../../assets/styles/global";
+@import "../../assets/styles/flapCard";
 
 .flap-card-wrapper{
   @include absCenter;
@@ -179,6 +226,26 @@ export default {
     height: px2rem(64);
     background: white;
     border-radius: px2rem(5);
+    // 执行完动画就会变回原来这样隐藏
+    transform: scale(0);
+    opacity: 0;
+    &.animation {
+      animation: scale .3s ease-in both;
+    }
+    @keyframes scale {
+      0% {
+        transform: scale(0);
+        opacity: 0;
+      }
+      70% {
+        transform: scale(1.3);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
     .flap-card{
       //因为图片过多溢出所以需要绝对定位居中来解决
       @include absCenter;
@@ -216,6 +283,22 @@ export default {
           border-radius: 0 px2rem(24) px2rem(24) 0;
           transform-origin: left;
           backface-visibility: hidden;
+        }
+      }
+    }
+    .point-wrapper{
+      @include absCenter;
+      .point{
+        border-radius: 50;
+        @include absCenter;
+        // 通过scss的for循环来循环小球的动画
+        &.animation {
+          @for $i from 1 to length($moves) {
+            // 给point里的子元素也就是小圆点添加动画
+            &:nth-child(#{$i}) {
+              @include move($i);
+            }
+          }
         }
       }
     }
