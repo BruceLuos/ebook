@@ -17,6 +17,20 @@
              :key="index"></div>
       </div>
   </div>
+  <!-- 推荐书籍 -->
+  <div class="book-card" :class="{'animation': runBookCardAnimation}" v-if="ifShowBookCard">
+      <div class="book-card-wrapper">
+        <div class="img-wrapper">
+          <img class="img" v-lazy="data.cover">
+        </div>
+        <div class="content-wrapper">
+          <div class="title">{{data.title}}</div>
+          <div class="author sub-title-medium">{{data.author}}</div>
+          <div class="category">{{categoryText()}}</div>
+        </div>
+        <div class="read-btn" @click.stop="showBookDetail">{{$t('home.readNow')}}</div>
+      </div>
+    </div>
   <!-- 关闭 -->
   <div class="close-btn-wrapper" @click="close">
     <div class="icon-close" ></div>
@@ -29,6 +43,9 @@ import { storeHomeMixin } from '../../utils/mixin'
 import { flapCardList } from '../../utils/store'
 export default {
   mixins:[storeHomeMixin],
+  props: {
+    random
+  },
   data() {
     return {
       flapCardList,

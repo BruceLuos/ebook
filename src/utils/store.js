@@ -91,7 +91,7 @@ export function appendAddToShelf (list) {
 export function removeAddFromShelf (list) {
   return list.filter(item => item.type !== 3)
 }
-
+// 卡片的数据
 export const flapCardList = [
   {
     r: 255,
