@@ -1,6 +1,6 @@
 <template>
 <div class='flap-card-wrapper' v-show="flapCardVisible">
-  <div class="flap-card-bg" :class="{'animation': runFlapCardAnimation}"  v-if="ifShowFlapCard">
+  <div class="flap-card-bg" :class="{'animation': runFlapCardAnimation}"  v-show="runFlapCardAnimation">
     <!-- 卡片 -->
     <div class="flap-card" v-for="(item, index) in flapCardList" :key="index" :style="{zIndex: item.zIndex}">
       <div class="flap-card-circle">
@@ -18,17 +18,17 @@
       </div>
   </div>
   <!-- 推荐书籍 -->
-  <div class="book-card" :class="{'animation': runBookCardAnimation}" v-if="ifShowBookCard">
+  <div class="book-card" :class="{'animation': runBookCardAnimation}"  v-show="runBookCardAnimation">
       <div class="book-card-wrapper">
         <div class="img-wrapper">
-          <img class="img" :src="data.cover">
+          <img class="img" :src="data ? data.cover : ''">
         </div>
         <div class="content-wrapper">
-          <div class="title">{{data.title}}</div>
-          <div class="author sub-title-medium">{{data.author}}</div>
+          <div class="title">{{data ? data.title : ''}}</div>
+          <div class="author sub-title-medium">{{data ? data.author : ''}}</div>
           <div class="category">{{categoryText()}}</div>
         </div>
-        <div class="read-btn" @click.stop="showBookDetail">{{$t('home.readNow')}}</div>
+        <div class="read-btn" @click.stop="showBookDetail(data)">{{$t('home.readNow')}}</div>
       </div>
     </div>
   <!-- 关闭 -->
@@ -56,10 +56,7 @@ export default {
       runFlapCardAnimation:false,
       pointList: null,
       runPointAnimation: false,
-      runBookCardAnimation: false,
-      ifShowBookCard: false,
-      ifShowFlapCard: true,
-      ifShowPoint: true
+      runBookCardAnimation: false
     }
   },
   watch: {
@@ -71,23 +68,19 @@ export default {
     }
   },
   methods: {
-    // 书籍详情
-    showBookDetail() {
-      if (this.data) {
-        console.log(this.data.cover)
-        showBookDetail(this, this.data)
-
-      }
-    },
     // 类别文本
     categoryText() {
-      return categoryText(this.data.category, this)
-      },
+      if (this.data) {
+        categoryText(this.data.category, this)
+      } else {
+        return ''
+      }
+    },
     close () {
       this.setFlapCardVisible(false)
-      this.stopFlapCardAnimation()
+      // this.stopFlapCardAnimation()
       this.stopAnimation()
-      this.startPointAnimation()
+      // this.startPointAnimation()
     },
     // 将卡片样式与数组绑定在一起，方便管理
     semiCircleStyle(item, dir) {
@@ -187,7 +180,9 @@ export default {
         this.rotate(index, 'front')
         this.rotate(index, 'back')
       })
-      this.stopFlapCardAnimation()
+      this.runPointAnimation = false
+      this.runBookCardAnimation = false
+      this.runFlapCardAnimation = false
     },
     // 执行小球动画
     startPointAnimation () {
@@ -227,20 +222,16 @@ export default {
       // 执行一定时间后将卡片隐藏
       this.timeout2 = setTimeout(() => {
         this.stopAnimation()
-        this.showBookCard()
+        this.runBookCardAnimation = true
       }, 2500);
     },
-    showBookCard() {
-      this.ifShowBookCard = true
-      this.runBookCardAnimation = true
-      this.ifShowFlapCard = false
-      this.ifShowPoint = false
-    },
+    // 停止所有动画
     stopAnimation () {
       this.runFlapCardAnimation = false
       if(this.task) {
         clearInterval(this.task)
       }
+      this.reset()
       if(this.timeout1) {
         clearTimeout(this.timeout1)
       }
