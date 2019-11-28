@@ -317,5 +317,6 @@ animation动画的基本步骤
 推荐书籍卡片的显示
 使用mockjs充当接口数据的模拟和axios
 mounted发送请求获取数据，随机获取数据中的图书数据
-将传给flapcard组件
+将数据传给flapcard组件
+书籍卡片在卡片动画后显示
  -->

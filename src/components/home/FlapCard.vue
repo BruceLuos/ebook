@@ -1,6 +1,6 @@
 <template>
 <div class='flap-card-wrapper' v-show="flapCardVisible">
-  <div class="flap-card-bg" :class="{'animation': runFlapCardAnimation}">
+  <div class="flap-card-bg" :class="{'animation': runFlapCardAnimation}"  v-if="ifShowFlapCard">
     <!-- 卡片 -->
     <div class="flap-card" v-for="(item, index) in flapCardList" :key="index" :style="{zIndex: item.zIndex}">
       <div class="flap-card-circle">
@@ -21,7 +21,7 @@
   <div class="book-card" :class="{'animation': runBookCardAnimation}" v-if="ifShowBookCard">
       <div class="book-card-wrapper">
         <div class="img-wrapper">
-          <img class="img" v-lazy="data.cover">
+          <img class="img" :src="data.cover">
         </div>
         <div class="content-wrapper">
           <div class="title">{{data.title}}</div>
@@ -39,12 +39,13 @@
 </template>
 
 <script>
-import { storeHomeMixin } from '../../utils/mixin'
-import { flapCardList } from '../../utils/store'
+import { storeHomeMixin, showBookDetail } from '../../utils/mixin'
+import { flapCardList, categoryText } from '../../utils/store'
+
 export default {
   mixins:[storeHomeMixin],
   props: {
-    random
+    data: Object
   },
   data() {
     return {
@@ -54,7 +55,11 @@ export default {
       intervalTime: 25,
       runFlapCardAnimation:false,
       pointList: null,
-      runPointAnimation: false
+      runPointAnimation: false,
+      runBookCardAnimation: false,
+      ifShowBookCard: false,
+      ifShowFlapCard: true,
+      ifShowPoint: true
     }
   },
   watch: {
@@ -64,13 +69,25 @@ export default {
         this.startAinmation()
       }
     }
-
-
   },
   methods: {
+    // 书籍详情
+    showBookDetail() {
+      if (this.data) {
+        console.log(this.data.cover)
+        showBookDetail(this, this.data)
+
+      }
+    },
+    // 类别文本
+    categoryText() {
+      return categoryText(this.data.category, this)
+      },
     close () {
       this.setFlapCardVisible(false)
       this.stopFlapCardAnimation()
+      this.stopAnimation()
+      this.startPointAnimation()
     },
     // 将卡片样式与数组绑定在一起，方便管理
     semiCircleStyle(item, dir) {
@@ -170,6 +187,7 @@ export default {
         this.rotate(index, 'front')
         this.rotate(index, 'back')
       })
+      this.stopFlapCardAnimation()
     },
     // 执行小球动画
     startPointAnimation () {
@@ -188,10 +206,6 @@ export default {
       this.task = setInterval(() => {
         this.flapCardRotate()
       },this.intervalTime)
-      // 执行一定时间后将卡片隐藏
-      setTimeout(() => {
-        this.stopAnimation()
-      }, 2500);
     },
     // 停止卡片动画
     stopFlapCardAnimation () {
@@ -205,16 +219,33 @@ export default {
     // 开始动画
     startAinmation () {
       this.runFlapCardAnimation = true
-      setTimeout(() => {
+      this.timeout1 = setTimeout(() => {
         this.startFlapCardAnimation()
         this.startPointAnimation()
         console.log('300')
       },300)
+      // 执行一定时间后将卡片隐藏
+      this.timeout2 = setTimeout(() => {
+        this.stopAnimation()
+        this.showBookCard()
+      }, 2500);
+    },
+    showBookCard() {
+      this.ifShowBookCard = true
+      this.runBookCardAnimation = true
+      this.ifShowFlapCard = false
+      this.ifShowPoint = false
     },
     stopAnimation () {
       this.runFlapCardAnimation = false
       if(this.task) {
         clearInterval(this.task)
+      }
+      if(this.timeout1) {
+        clearTimeout(this.timeout1)
+      }
+      if(this.timeout2) {
+        clearTimeout(this.timeout2)
       }
     }
   },
@@ -320,6 +351,78 @@ export default {
       }
     }
   }
+  .book-card {
+      position: relative;
+      width: 65%;
+      // height: 70%;
+      box-sizing: border-box;
+      border-radius: px2rem(15);
+      background: white;
+      &.animation {
+        animation: scale .3s ease-in both;
+        @keyframes scale {
+          0% {
+            transform: scale(0);
+            opacity: 0;
+          }
+          100% {
+            transform: scale(1);
+            opacity: 1;
+          }
+        }
+      }
+      .book-card-wrapper {
+        width: 100%;
+        height: 100%;
+        margin-bottom: px2rem(30);
+        @include columnTop;
+        .img-wrapper {
+          width: 100%;
+          margin-top: px2rem(20);
+          @include center;
+          .img {
+            width: px2rem(90);
+            height: px2rem(130);
+          }
+        }
+        .content-wrapper {
+          padding: 0 px2rem(20);
+          margin-top: px2rem(20);
+          .title {
+            color: #333;
+            font-weight: bold;
+            font-size: px2rem(18);
+            line-height: px2rem(20);
+            max-height: px2rem(40);
+            text-align: center;
+            @include ellipsis2(2)
+          }
+          .author {
+            margin-top: px2rem(10);
+            text-align: center;
+          }
+          .category {
+            color: #999;
+            font-size: px2rem(14);
+            margin-top: px2rem(10);
+            text-align: center;
+          }
+        }
+        .read-btn {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          z-index: 1100;
+          width: 100%;
+          border-radius: 0 0 px2rem(15) px2rem(15);
+          padding: px2rem(15) 0;
+          text-align: center;
+          color: white;
+          font-size: px2rem(14);
+          background: $color-blue;
+        }
+      }
+    }
   .close-btn-wrapper{
     position: absolute;
     left: 0;
