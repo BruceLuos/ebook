@@ -6,7 +6,22 @@
   <div class="banner-wrapper">
      <img class="banner" :src="banner">
   </div>
+  <!-- 猜你喜欢 -->
   <guess-you-like :data="guessYouLike"></guess-you-like>
+  <!-- 推荐 -->
+  <recommend class="recommend" :data="recommend"></recommend>
+  <!-- 精选 -->
+  <featured
+  class="featured"
+  :titleText="$t('home.featured')"
+  :btnText="$t('home.seeAll')"
+  :data="featured"></featured>
+  <!-- 分类 -->
+  <div class="category-list-wapper" v-for="(item, index) in categoryList" :key="index">
+    <category-book class="category-book" :data="item"></category-book>
+  </div>
+  <!--所有分类s -->
+  <category class="category" :data="categorys"></category>
   </scroll>
 </div>
 </template>
@@ -16,6 +31,10 @@ import SearchBar from '../../components/home/searchBar'
 import Scroll from '../../components/common/Scroll'
 import FlapCard from '../../components/home/FlapCard'
 import GuessYouLike from '../../components/home/GuessYouLike'
+import Recommend from '../../components/home/Recommend'
+import Featured from '../../components/home/Featured'
+import CategoryBook from '../../components/home/CategoryBook'
+import Category from '../../components/home/Category'
 import {storeHomeMixin} from '../../utils/mixin'
 import { home } from '../../api/store'
 export default {
@@ -24,14 +43,22 @@ export default {
     SearchBar,
     Scroll,
     FlapCard,
-    GuessYouLike
+    GuessYouLike,
+    Recommend,
+    Featured,
+    CategoryBook,
+    Category
   },
   data () {
     return{
       scrollTop: 94,
       random: null,
       banner: null,
-      guessYouLike: null
+      guessYouLike: null,
+      recommend: null,
+      featured: null,
+      categoryList: null,
+      categorys: null
     }
   },
   methods: {
@@ -83,6 +110,9 @@ export default {
       background-repeat: no-repeat;
       background-size: 100% 100%;
     }
+  }
+  .recommend{
+    margin-top:px2rem(20);
   }
 }
 </style>
