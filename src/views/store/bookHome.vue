@@ -3,34 +3,10 @@
   <search-bar></search-bar>
   <flap-card :data="random"></flap-card>
   <scroll :top="scrollTop" @onScroll="onScroll" ref="scroll">
-    <div>1111111111111111111111111</div>
-     <div>1111111111111111111111111</div>
-     <div>1111111111111111111111111</div>
-     <div>1111111111111111111111111</div>
-     <div>1111111111111111111111111</div>
-     <div>1111111111111111111111111</div>
-     <div>1111111111111111111111111</div>
-      <div>1111111111111111111111111</div>
-       <div>1111111111111111111111111</div>
-        <div>1111111111111111111111111</div>
-        <div>1111111111111111111111111</div>
-        <div>1111111111111111111111111</div>
-        <div>1111111111111111111111111</div>
-        <div>1111111111111111111111111</div>
-        <div>1111111111111111111111111</div>
-     <div>1111111111111111111111111</div>
-     <div>1111111111111111111111111</div>
-     <div>1111111111111111111111111</div>
-     <div>1111111111111111111111111</div>
-     <div>1111111111111111111111111</div>
-     <div>1111111111111111111111111</div>
-      <div>1111111111111111111111111</div>
-       <div>1111111111111111111111111</div>
-        <div>1111111111111111111111111</div>
-        <div>1111111111111111111111111</div>
-        <div>1111111111111111111111111</div>
-        <div>1111111111111111111111111</div>
-        <div>1111111111111111111111111</div>
+  <div class="banner-wrapper">
+     <img class="banner" :src="banner">
+  </div>
+  <guess-you-like :data="guessYouLike"></guess-you-like>
   </scroll>
 </div>
 </template>
@@ -39,6 +15,7 @@
 import SearchBar from '../../components/home/searchBar'
 import Scroll from '../../components/common/Scroll'
 import FlapCard from '../../components/home/FlapCard'
+import GuessYouLike from '../../components/home/GuessYouLike'
 import {storeHomeMixin} from '../../utils/mixin'
 import { home } from '../../api/store'
 export default {
@@ -46,12 +23,15 @@ export default {
   components: {
     SearchBar,
     Scroll,
-    FlapCard
+    FlapCard,
+    GuessYouLike
   },
   data () {
     return{
       scrollTop: 94,
-      random: null
+      random: null,
+      banner: null,
+      guessYouLike: null
     }
   },
   methods: {
@@ -92,5 +72,17 @@ export default {
   width: 100%;
   height: 100%;
   background: white;
+  .banner-wrapper{
+    width: 100%;
+    padding: px2rem(10);
+    box-sizing: border-box;
+    .banner{
+      width: 100%;
+      height: px2rem(150);
+      // overflow: hidden;
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+    }
+  }
 }
 </style>
