@@ -323,5 +323,6 @@ mounted发送请求获取数据，随机获取数据中的图书数据
 
 猜你喜欢组件完成
 首页的猜你喜欢推荐精选分类所有分类布局完成
-
+引入storeDetail和StoreList、toast组件等
+编写detail接口和list接口
  -->

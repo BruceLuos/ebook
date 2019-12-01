@@ -19,6 +19,13 @@ export const storeHomeMixin = {
     showBookDetail (book) {
       // gotoBookDetail(this, book)
       console.log('showbookdetail')
+      this.$router.push({
+        path: '/book-store/detail',
+        query: {
+          fileName: book.fileName,
+          category: book.categoryText
+        }
+      })
     }
   }
 }

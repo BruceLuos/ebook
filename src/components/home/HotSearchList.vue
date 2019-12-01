@@ -20,7 +20,7 @@
 
 <script>
   import Scroll from '../common/Scroll'
-  import HotSearch from './HotSearch'
+  import HotSearch from './hotSearch'
   import { storeHomeMixin } from '../../utils/mixin'
 
   export default {
