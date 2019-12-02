@@ -236,6 +236,7 @@
         })
       },
       init() {
+        // 从bookhome页面传来的接口参数
         this.fileName = this.$route.query.fileName
         this.categoryText = this.$route.query.category
         if (this.fileName) {
@@ -250,6 +251,7 @@
               if (rootFile.startsWith('/')) {
                 rootFile = rootFile.substring(1, rootFile.length)
               }
+              // 拼接opf
               this.opf = `${process.env.VUE_APP_EPUB_OPF_URL}/${this.fileName}/${rootFile}`
               this.parseBook(this.opf)
             } else {

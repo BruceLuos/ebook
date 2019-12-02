@@ -23,7 +23,7 @@ export const storeHomeMixin = {
         path: '/book-store/detail',
         query: {
           fileName: book.fileName,
-          category: book.categoryText
+          category: book.category
         }
       })
     }
