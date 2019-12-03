@@ -145,7 +145,7 @@ export default {
     //   this.setFontFamilyVisible(false)
     // },
     // 初始化获取缓存中的字体大小
-    initFontSize() {
+    initFontSize () {
         let fontSize = getFontSize(this.fileName)
         if (!fontSize) {
           saveFontSize(this.fileName, this.defaultFontSize)
@@ -155,7 +155,7 @@ export default {
         }
       },
     // 初始化获取缓存中的字体
-    initFontFamily() {
+    initFontFamily () {
         let font = getFontFamily(this.fileName)
         if (!font) {
           saveFontFamily(this.fileName, this.defaultFontFamily)
@@ -211,11 +211,11 @@ export default {
        // 绑定dom read进行书籍的渲染
       this.rendition = this.book.renderTo('read', {
         width: window.innerWidth,
-        height: window.innerHeight,
-        method: 'default'
+        height: window.innerHeight
       })
       // 展示电子书  在这过程中获取存储在localstorage中的字体属性
       const location = getLocation(this.fileName)
+      console.log(this.fileName)
       console.log(location)
         this.display(location, () => {
           this.initTheme()
@@ -254,7 +254,7 @@ export default {
           // toc是一级目录
           const navItem = flatten(nav.toc)
           // 查看是否含有父级
-          function find(item, level = 0) {
+          function find (item, level = 0) {
             return !item.parent ? level : find(navItem.filter(parentItem => parentItem.id === item.parent)[0], ++level)
           }
           // 为一级内容添加标识level
@@ -267,13 +267,14 @@ export default {
     // 合并电子书url并解析渲染电子书
     initEpub () {
       // http://localhost:8080/#/ebook/Biomedicine|2014_Book_Self-ReportedPopulationHealthA
-      const url = 'http://192.168.1.105:9090/epub/' + this.fileName + '.epub'
+      const url = process.env.VUE_APP_RES_URL + '/epub/' + this.fileName + '.epub'
       console.log(url)
       // 解析获取book
       this.book = new Epub(url)
       // 将book对象存放在vuex中
       this.setCurrentBook(this.book)
       console.log(this.book)
+      console.log(this.fileName)
       // 电子书的渲染
       this.initRendition()
       // 手势

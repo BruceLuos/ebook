@@ -159,6 +159,7 @@
         this.toastText = text
         this.$refs.toast.show()
       },
+      // 阅读书籍
       readBook() {
         this.$router.push({
           path: `/ebook/${this.categoryText}|${this.fileName}`
@@ -236,7 +237,7 @@
         })
       },
       init() {
-        // 从bookhome页面传来的接口参数
+        // 从bookhome页面传来的路由接口请求参数
         this.fileName = this.$route.query.fileName
         this.categoryText = this.$route.query.category
         if (this.fileName) {

@@ -1,4 +1,4 @@
-// import { getLocalStorage, getBookShelf, saveBookShelf } from './localstorage'
+import { getLocalStorage, getBookShelf, saveBookShelf } from './localStorage'
 
 export function addToShelf (book) {
   let shelfList = getBookShelf()
