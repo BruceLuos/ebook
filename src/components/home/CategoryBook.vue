@@ -31,7 +31,7 @@
     methods: {
       showBookCategory() {
         this.$router.push({
-          path: '/store/list',
+          path: '/book/list',
           query: {
             category: getCategoryName(this.data.category),
             categoryText: this.categoryText(this.data.category)

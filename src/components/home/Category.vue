@@ -33,8 +33,9 @@
     },
     methods: {
       showBookCategory(item) {
+        // 路由跳转携带参数
         this.$router.push({
-          path: '/store/list',
+          path: '/book/list',
           query: {
             category: getCategoryName(item.category),
             categoryText: this.categoryText(item.category)

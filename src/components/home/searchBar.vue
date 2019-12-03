@@ -117,7 +117,7 @@ export default {
     // 搜索
     search () {
       this.$router.push({
-        path: '/store/list',
+        path: '/book/list',
         query: {
           keyword: this.searchText
         }

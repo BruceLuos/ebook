@@ -29,7 +29,7 @@
     },
     methods: {
       showBookShelf() {
-        this.$router.push('/store/shelf')
+        this.$router.push('/book/shelf')
       },
       showShadow() {
         this.ifHideShadow = false

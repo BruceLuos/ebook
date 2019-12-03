@@ -330,5 +330,16 @@ mounted发送请求获取数据，随机获取数据中的图书数据
 因为mock模拟接口只能展示txt对象,而电子书是block对象另外一种格式,所以电子书渲染不出来，所以要用的别的方法模拟请求接口
 在vue.config中模拟接口
 本地调试模式中的devServer中配置mock接口
-然后书籍请求回来的数据就是txt格式这样就可以把书籍解析渲染出来页面上
+然后书籍请求回来的数据就是json格式这样就可以把书籍解析渲染出来页面上
+
+书籍详情列表页
+
+搜索详细功能
+@keyup.13.exact="search"表示只能回车查询
+this.$router.push{{
+  path: '/book/list',
+  query: {
+    keyword: this.searchText
+  }
+}}
  -->

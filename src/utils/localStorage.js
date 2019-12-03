@@ -1,21 +1,29 @@
 import Storage from 'web-storage-cache'
 
-const localStorage = new Storage()
+const localstorage = new Storage()
 
 export function setLocalStorage (key, value) {
-  return localStorage.set(key, value)
+  return localstorage.set(key, value)
 }
 
 export function getLocalStorage (key) {
-  return localStorage.get(key)
+  return localstorage.get(key)
 }
 
 export function removeLocalStorage (key) {
-  return localStorage.delete(key)
+  return localstorage.delete(key)
 }
 
 export function clearLocalStorage () {
-  return localStorage.clear()
+  return localstorage.clear()
+}
+
+export function saveBookShelf (shelf) {
+  return setLocalStorage('shelf', shelf)
+}
+
+export function getBookShelf () {
+  return getLocalStorage('shelf')
 }
 
 export function setBookObject (fileName, key, value) {
@@ -104,8 +112,8 @@ export function getFontFamily (fileName) {
   return getBookObject(fileName, 'fontFamily')
 }
 
-export function saveFontFamily (fileName, fontFamily) {
-  setBookObject(fileName, 'fontFamily', fontFamily)
+export function saveFontFamily (fileName, font) {
+  return setBookObject(fileName, 'fontFamily', font)
 }
 
 export function getTheme (fileName) {
