@@ -47,7 +47,7 @@ const actions = {
   setPaginate: ({ commit }, paginate) => {
     return commit('SET_PAGINATE', paginate)
   },
-  setPagelist: ({ commit }, pagelist) => {
+  setPageList: ({ commit }, pagelist) => {
     return commit('SET_PAGELIST', pagelist)
   },
   setIsBookmark ({ commit }, isBookmark) {
@@ -61,8 +61,25 @@ const actions = {
   },
   setFlapCardVisible ({ commit }, visible) {
     return commit('SET_FLAP_CARD_VISIBLE', visible)
+  },
+  setIsEditMode ({ commit }, isEditMode) {
+    return commit('SET_IS_EDIT_MODE', isEditMode)
+  },
+  setShelfList ({ commit }, list) {
+    return commit('SET_SHELF_LIST', list)
+  },
+  setShelfSelected ({ commit }, selected) {
+    return commit('SET_SHELF_SELECTED', selected)
+  },
+  setShelfTitleVisible ({ commit }, visible) {
+    return commit('SET_SHELF_TITLE_VISIBLE', visible)
+  },
+  setShelfCategory ({ commit }, category) {
+    return commit('SET_SHELF_CATEGORY', category)
+  },
+  setCurrentType ({ commit }, type) {
+    return commit('SET_CURRENT_TYPE', type)
   }
-
 }
 
 export default actions

@@ -22,7 +22,7 @@
 <script>
 import { ebookMixin } from '../../utils/mixin'
 import { FONT_FAMILY } from '../../utils/book'
-import { saveFontFamily } from '../../utils/localStorage'
+import { saveFontFamily } from '../../utils/localstorage'
 export default {
   mixins: [ebookMixin],
   data () {

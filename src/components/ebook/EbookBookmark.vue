@@ -16,7 +16,7 @@
   import { realPx } from '../../utils/utils'
   import Bookmark from '../common/Bookmark'
   import { ebookMixin } from '../../utils/mixin'
-  import { getBookmark, saveBookmark } from '../../utils/localStorage'
+  import { getBookmark, saveBookmark } from '../../utils/localstorage'
 
   const BLUE = '#346cbc'
   const WHITE = '#fff'

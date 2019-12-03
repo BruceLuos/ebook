@@ -16,7 +16,7 @@
 
 <script>
   import { ebookMixin } from '../../utils/mixin'
-  import { saveTheme } from '../../utils/localStorage'
+  import { saveTheme } from '../../utils/localstorage'
 
   export default {
     mixins: [ebookMixin],

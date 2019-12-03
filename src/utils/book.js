@@ -1,4 +1,4 @@
-import { getReadTime } from './localStorage'
+import { getReadTime } from './localstorage'
 import { realPx } from './utils'
 
 // 字体大小组数

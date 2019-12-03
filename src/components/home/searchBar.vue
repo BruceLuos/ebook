@@ -3,9 +3,11 @@
     <div class="search-bar" :class="{'hide-title': !titleVisible, 'hide-shadow': !shadowVisible}">
       <transition name="title-move">
         <div class="search-bar-title-wrapper" v-show="titleVisible">
+          <!-- 标题 -->
           <div class="title-text-wrapper">
             <span class="title-text title">{{$t('home.title')}}</span>
           </div>
+          <!-- 推荐书籍 -->
           <div class="title-icon-shake-wrapper" @click="showFlapCard">
             <span class="icon-shake icon"></span>
           </div>
@@ -16,6 +18,7 @@
       @click="back">
         <span class="icon-back icon"></span>
       </div>
+      <!-- 搜索框 -->
       <div class="search-bar-input-wrapper" :class="{'hide-title': !titleVisible}">
         <div class="search-bar-blank" :class="{'hide-title': !titleVisible}"></div>
         <div class="search-bar-input">
@@ -99,16 +102,19 @@ export default {
         this.$refs.hotsearch.reset()
       })
     },
+    // 返回
     back () {
       if (this.offsetY > 0) {
         this.showShadow()
       } else {
         this.hideShadow()
       }
+      // hotsearch显示的话就先隐藏
       if (this.hotSearchVisible) {
         this.hideHotSearch()
       } else {
-        this.$router.push('/store/shelf')
+        // 没有hotsearch也就是在home
+        this.$router.push('/book/shelf')
       }
     },
     showFlapCard () {

@@ -33,7 +33,7 @@
 <script>
   import { FONT_SIZE_LIST } from '../../utils/book'
   import { ebookMixin } from '../../utils/mixin'
-  import { saveFontSize } from '../../utils/localStorage'
+  import { saveFontSize } from '../../utils/localstorage'
 
   export default {
     mixins: [ebookMixin],
