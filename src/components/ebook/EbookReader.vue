@@ -225,6 +225,7 @@ export default {
         })
       // 加载不同的字体样式资源
         // 通过hooks这个钩子函数
+        console.log(this.rendition)
         this.rendition.hooks.content.register(contents => {
           // addStylesheet参数要求为一个url
           // 所以我们需要把资源放在nginx上

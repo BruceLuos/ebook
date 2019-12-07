@@ -4,7 +4,7 @@ const store = {
     flapCardVisible: false,
     isEditMode: false,
     shelfList: [],
-    shelfSelected: [],
+    shelfSelected: [1],
     shelfTitleVisible: true,
     shelfCategory: [],
     currentType: 1

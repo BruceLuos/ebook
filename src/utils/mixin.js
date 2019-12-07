@@ -81,7 +81,7 @@ export const storeHomeMixin = {
     showBookDetail (book) {
       // gotoBookDetail(this, book)
       console.log('showbookdetail')
-      this.flapCardVisible = false
+      // this.flapCardVisible = false
       this.$router.push({
         path: '/book/detail',
         query: {

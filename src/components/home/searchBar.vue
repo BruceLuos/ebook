@@ -172,7 +172,7 @@ export default {
         top: 0;
         z-index: 200;
         height: px2rem(42);
-        transition: height $homeAnimationTime linear;
+        transition: height $animationTime linear;
         @include center;
         &.hide-title {
           height: px2rem(52);
@@ -187,14 +187,14 @@ export default {
       height: px2rem(52);
       padding: px2rem(10);
       box-sizing: border-box;
-      transition: top $homeAnimationTime linear;
+      transition: top $animationTime linear;
       &.hide-title {
         top: 0;
       }
       .search-bar-blank {
         flex: 0 0 0;
         width: 0;
-        transition: all $homeAnimationTime linear;
+        transition: all $animationTime linear;
         &.hide-title {
           flex: 0 0 px2rem(31);
           width: px2rem(31);

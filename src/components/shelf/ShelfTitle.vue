@@ -1,16 +1,21 @@
 <template>
-<div class='shelf-title'>
-  <div class="shelf-title-wrapper">
-    <span class="shelf-title-text">{{$t('shelf.title')}}</span>
-    <span class="shelf-title-sub-text">{{selectedText}}</span>
-  </div>
-  <div class="shelf-title-btn-wrapper shelf-title-left">
-    <span class="shelf-title-btn-text">{{$t('shelf.clearCache')}}</span>
-  </div>
-  <div class="shelf-title-btn-wrapper shelf-title-right">
-    <span class="shelf-title-btn-text" @click="onEditClick">{{isEditMode ? $t('shelf.cancel') : $t('shelf.edit')}}</span>
-  </div>
-</div>
+  <transition name="fade">
+    <div class='shelf-title' v-show="shelfTitleVisible">
+      <!-- 标题 -->
+      <div class="shelf-title-wrapper">
+        <span class="shelf-title-text">{{$t('shelf.title')}}</span>
+        <span class="shelf-title-sub-text" v-show="isEditMode">{{selectedText}}</span>
+      </div>
+      <!-- 清除缓存 -->
+      <div class="shelf-title-btn-wrapper shelf-title-left">
+        <span class="shelf-title-btn-text" @click="clearCache">{{$t('shelf.clearCache')}}</span>
+      </div>
+      <!-- 编辑模式 -->
+      <div class="shelf-title-btn-wrapper shelf-title-right">
+        <span class="shelf-title-btn-text" @click="onEditClick">{{isEditMode ? $t('shelf.cancel') : $t('shelf.edit')}}</span>
+      </div>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -19,12 +24,21 @@ export default {
   mixins: [storeShelfMixin],
   computed: {
     selectedText() {
-      return this.$t('shelf.selectBook')
+      // 判断选择的书籍数量进行显示
+      const selectedNumber =  this.shelfSelected ? this.shelfSelected.length : 0
+      return selectedNumber <= 0
+      ? this.$t('shelf.selectBook')
+      : selectedNumber === 1
+      ? this.$t('shelf.haveSelectedBook').replace('$1',selectedNumber)
+      : this.$t('shelf.haveSelectedBook').replace('$1',selectedNumber)
     }
   },
   methods: {
     onEditClick () {
       this.setIsEditMode(!this.isEditMode)
+    },
+    clearCache () {
+      console.log('clearCache')
     }
   },
 }
@@ -33,6 +47,7 @@ export default {
 @import "../../assets/styles/global";
 .shelf-title{
   position: relative;
+  z-index: 150;
   width: 100%;
   height: px2rem(42);
   background: white;
