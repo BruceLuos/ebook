@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div class='shelf-title' v-show="shelfTitleVisible">
+    <div class='shelf-title'  :class="{'hide-shadow': ifHideShadow}" v-show="shelfTitleVisible">
       <!-- 标题 -->
       <div class="shelf-title-wrapper">
         <span class="shelf-title-text">{{$t('shelf.title')}}</span>
@@ -22,6 +22,20 @@
 import {storeShelfMixin} from '../../utils/mixin'
 export default {
   mixins: [storeShelfMixin],
+  watch: {
+    offsetY(offsetY) {
+      if (offsetY > 0) {
+        this.ifHideShadow = false
+      } else {
+        this.ifHideShadow = true
+      }
+    }
+  },
+  data () {
+    return {
+      ifHideShadow: true
+    }
+  },
   computed: {
     selectedText() {
       // 判断选择的书籍数量进行显示
@@ -51,6 +65,10 @@ export default {
   width: 100%;
   height: px2rem(42);
   background: white;
+  box-shadow: 0 px2rem(2) px2rem(2) 0 rgba(0, 0, 0, .1);
+  &.hide-shadow {
+    box-shadow: none;
+  }
   .shelf-title-wrapper{
     position: absolute;
     top: 0;

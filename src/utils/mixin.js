@@ -33,6 +33,7 @@ export const storeShelfMixin = {
         this.setShelfCategory(categoryList)
       })
     },
+    // 获取书架数据
     getShelfList () {
       let shelfList = getBookShelf()
       if (!shelfList) {

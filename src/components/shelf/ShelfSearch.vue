@@ -31,7 +31,7 @@
       <span class="cancel-text">{{$t('shelf.cancel')}}</span>
     </div>
   </div>
-  <!-- 搜索切换 -->
+  <!-- 搜索切换tabar -->
   <transition name="hot-search-move">
     <div class="shelf-search-tab-wrapper" v-if="ifInputClicked">
       <div class="shelf-search-tab-item" v-for="item in tabs" :key="item.id" @click="onTabClick(item.id)">
@@ -49,6 +49,16 @@ import { storeShelfMixin } from '../../utils/mixin'
 
 export default {
   mixins: [storeShelfMixin],
+   watch: {
+    offsetY(offsetY) {
+      // 搜索框的阴影在点击搜索框后才能展示出来
+      if (offsetY > 0 && this.ifInputClicked) {
+        this.ifHideShadow = false // 显示阴影
+      } else {
+        this.ifHideShadow = true // 隐藏阴影
+      }
+    }
+  },
   data() {
     return {
       searchText:'',
