@@ -1,7 +1,7 @@
 <template>
-<div class='shelf-search-wrapper'>
+<div class='shelf-search-wrapper' :class="{'search-top': ifInputClicked, 'hide-shadow': ifHideShadow}">
   <!-- 搜索框 -->
-  <div class="shelf-search">
+  <div class="shelf-search" :class="{'search-top': ifInputClicked}">
     <div class="search-wrapper">
       <!-- 搜索图标 -->
       <div class="icon-search-wrapper">
@@ -12,42 +12,99 @@
         <input type="text"
         class="search-input"
         :placeholder="$t('shelf.search')"
-        v-model="searchText">
+        v-model="searchText"
+        @click="onSearchClick">
       </div>
       <!-- 取消图标 -->
-      <div class="icon-clear-wrapper">
+      <div class="icon-clear-wrapper"
+           v-show="searchText.length > 0"
+           @click="clearSearchText">
         <span class="icon-close-circle-fill"></span>
       </div>
     </div>
     <!-- 国际化切换 -->
-    <div class="icon-locale-wrapper">
+    <div class="icon-locale-wrapper" v-if="!ifInputClicked" @click="switchLocale">
       <span class="icon-cn icon" v-if="lang === 'cn'"></span>
       <span class="icon-en icon" v-else></span>
     </div>
-    <div class="cancel-btn-wrapper" @click="onCancelClick">
+    <div class="cancel-btn-wrapper" @click="onCancelClick" v-else>
       <span class="cancel-text">{{$t('shelf.cancel')}}</span>
     </div>
   </div>
+  <!-- 搜索切换 -->
+  <transition name="hot-search-move">
+    <div class="shelf-search-tab-wrapper" v-if="ifInputClicked">
+      <div class="shelf-search-tab-item" v-for="item in tabs" :key="item.id" @click="onTabClick(item.id)">
+        <span class="shelf-search-tab-text" :class="{'is-selected': item.id === selectedTab}">{{item.text}}</span>
+      </div>
+    </div>
+  </transition>
 </div>
 </template>
 
 <script>
+import { setLocalStorage } from '../../utils/localstorage'
+import { storeShelfMixin } from '../../utils/mixin'
 
 
 export default {
+  mixins: [storeShelfMixin],
   data() {
     return {
-      searchText:''
+      searchText:'',
+      ifInputClicked: false,
+      selectedTab: 1,
+      ifHideShadow: true
     }
   },
   computed: {
     lang() {
       return this.$i18n.locale
+    },
+    tabs() {
+      return [
+        {
+          id: 1,
+          text: this.$t('shelf.default')
+        },
+        {
+          id: 2,
+          text: this.$t('shelf.progress')
+        },
+        {
+          id: 3,
+          text: this.$t('shelf.purchase')
+        }
+      ]
     }
   },
   methods: {
+    // 搜索切换
+    onTabClick (id) {
+      this.selectedTab = id
+    },
+    // 清除内容
+    clearSearchText () {
+      this.searchText = ''
+    },
+    // 切换语言
+    switchLocale () {
+      if(this.lang === 'en') {
+        this.$i18n.locale = 'cn'
+      } else {
+        this.$i18n.locale = 'en'
+      }
+      setLocalStorage('locale', this.$i18n.locale)
+    },
+    // 取消搜索
     onCancelClick() {
-      console.log('oncancelClick')
+      this.ifInputClicked = false
+      this.setShelfTitleVisible(true)
+    },
+    // 点击搜索框
+    onSearchClick() {
+      this.ifInputClicked = true
+      this.setShelfTitleVisible(false)
     }
   },
 }
@@ -80,8 +137,10 @@ export default {
       // 搜索框外部flex
       display: flex;
       width: 100%;
+      // 给搜索框52的高度
       height: px2rem(52);
       transition: top $animationTime linear;
+      // 点击标题框时将他向上移动
       &.search-top {
         top: 0;
       }
@@ -151,6 +210,7 @@ export default {
       z-index: 105;
       display: flex;
       width: 100%;
+      // 给切换bar 42的高度
       height: px2rem(42);
       .shelf-search-tab-item {
         flex: 1;
