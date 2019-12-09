@@ -347,7 +347,11 @@ this.$router.push{{
 书架搜索框布局实现
 编写书架搜索框组件
 点击搜索框时搜索框往上移并显示下面的小组件
-使用scroll
+使用scroll组件
+
+标题和搜索框的阴影根据scroll滚动>0(offsetY)
+在storeshelf中的onScroll中获得offsetY
+在storeshelf中包含的其他组件中监听offsetY然后进行阴影的隐藏和展示
 
 书架书籍排版
 书架列表组件->书架展示切换组件->三个展示不同内容的书架组件

@@ -1,5 +1,5 @@
 <template>
-<div class='shelf-item-add'></div>
+<div class='shelf-book'></div>
 </template>
 
 <script>

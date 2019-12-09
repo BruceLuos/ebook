@@ -3,7 +3,7 @@
     <shelf-title></shelf-title>
     <scroll :top="0" class="store-shelf-store-wrapper" @onScroll="onScroll">
       <shelf-search></shelf-search>
-      <shelf-list></shelf-list>
+      <shelf-list :data="shelfList"></shelf-list>
     </scroll>
   </div>
 </template>
