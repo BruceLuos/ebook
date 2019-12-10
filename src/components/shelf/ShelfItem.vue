@@ -1,6 +1,6 @@
 <template>
 <div class='shelf-item'>
-  <component :is="item"></component>
+  <component :is="item" :data="data"></component>
 </div>
 </template>
 
