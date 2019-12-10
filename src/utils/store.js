@@ -66,7 +66,7 @@ export function computeId (list) {
 
 export function gotoBookDetail (vue, book) {
   vue.$router.push({
-    path: '/store/detail',
+    path: '/book/detail',
     query: {
       fileName: book.fileName,
       category: book.categoryText
@@ -76,10 +76,10 @@ export function gotoBookDetail (vue, book) {
 
 export function gotoStoreHome (vue) {
   vue.$router.push({
-    path: '/store/home'
+    path: '/book/home'
   })
 }
-
+// 在书架列表上添加一条数据用以添加封面的展示
 export function appendAddToShelf (list) {
   list.push({
     id: -1,

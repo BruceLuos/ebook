@@ -27,9 +27,11 @@ export const storeShelfMixin = {
       'setShelfCategory',
       'setCurrentType'
     ]),
+    // 跳转到详情页
     showBookDetail (book) {
       gotoBookDetail(this, book)
     },
+    // 获取分类列表数据
     getCategoryList (title) {
       this.getShelfList().then(() => {
         const categoryList = this.shelfList.filter(book => book.type === 2 && book.title === title)[0]
