@@ -27,7 +27,9 @@ export default {
   },
    watch: {
     isEditMode(isEditMode) {
+      // 在编辑模式时让scroll距离底部的位置为48以展示隐藏掉的书籍标题
       this.scrollBottom = isEditMode ? 48 : 0
+      // 在页面渲染完后刷新scroll
       this.$nextTick(() => {
         this.$refs.scroll.refresh()
       })

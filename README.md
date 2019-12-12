@@ -369,4 +369,7 @@ vuex添加记录书架中被选择的书籍数组
 编写boost.js中的数组去重
 
 选择模式中的底部tabbar
+使用vue-create-api来将复用组件扩展成vue实例中的方法api
+让弹窗popup可以更方便使用
+
  -->

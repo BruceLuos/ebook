@@ -49,6 +49,11 @@ export default {
   },
   methods: {
     onEditClick () {
+      if(!this.isEditMode) {
+        // 不是编辑模式的时候清空书架被选择列表
+        this.setShelfSelected([])
+        this.shelfList.forEach(item => item.selected = false)
+      }
       this.setIsEditMode(!this.isEditMode)
     },
     clearCache () {

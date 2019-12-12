@@ -7,6 +7,7 @@ import i18n from './lang/index'
 import './assets/styles/icon.css'
 import './assets/styles/global.scss'
 import './utils/boost'
+import './utils/create-api'
 Vue.config.productionTip = false
 
 new Vue({

@@ -69,6 +69,7 @@
         {{inBookShelf ? $t('detail.isAddedToShelf') : $t('detail.addOrRemoveShelf')}}
       </div>
     </div>
+    <!-- 试读部分 -->
     <toast :text="toastText" ref="toast"></toast>
   </div>
 </template>
