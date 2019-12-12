@@ -6,6 +6,7 @@
                :class="{'is-edit': isEditMode && data.type === 2}"
                :is="item"
                :data="data"></component>
+    <!-- 书籍被选中时的图标状态 -->
     <div class="icon-selected"
          :class="{'is-selected': data.selected}"
          v-show="isEditMode && data.type === 1"></div>
@@ -37,13 +38,25 @@ export default {
   },
   methods: {
     onItemClick () {
-      if(this.data.type === 1){
-        this.showBookDetail(this.data)
-      } else if (this.data.type === 2) {
-
+      if(this.isEditMode) {
+        // 书籍选中状态取反
+        this.data.selected = !this.data.selected
+        // 当选择时调整选择书籍数量
+        if(this.data.selected) {
+          this.shelfSelected.pushWithoutDuplicate(this.data)
+        } else {
+          this.setShelfSelected(this.shelfSelected.filter(item => item.id !== this.data.id))
+        }
       } else {
-        gotoStoreHome(this)
+         if(this.data.type === 1){
+          this.showBookDetail(this.data)
+        } else if (this.data.type === 2) {
+
+        } else {
+          gotoStoreHome(this)
+        }
       }
+
     }
   },
 }

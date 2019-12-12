@@ -6,6 +6,7 @@ import i18n from './lang/index'
 // import './mock'
 import './assets/styles/icon.css'
 import './assets/styles/global.scss'
+import './utils/boost'
 Vue.config.productionTip = false
 
 new Vue({
