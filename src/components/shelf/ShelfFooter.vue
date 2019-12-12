@@ -2,13 +2,14 @@
 <div class='shelf-footer' v-show="isEditMode">
    <div class="shelf-footer-tab-wrapper" v-for="item in tabs" :key="item.index" @click="onTabClick(item)">
       <div class="shelf-footer-tab" :class="{'is-selected': isSelected}">
-        <div class="icon-private tab-icon" v-if="item.index === 1 "></div>
-        <div class="icon-private-see tab-icon" v-if="item.index === 1 "></div>
+        <!-- 开启私密与关闭私密的不同图标 -->
+        <div class="icon-private tab-icon" v-if="item.index === 1 && !isPrivate"></div>
+        <div class="icon-private-see tab-icon" v-if="item.index === 1 && isPrivate"></div>
         <div class="icon-download tab-icon" v-if="item.index === 2 "></div>
         <div class="icon-download-remove tab-icon" v-if="item.index === 2 "></div>
         <div class="icon-move tab-icon" v-if="item.index === 3"></div>
         <div class="icon-shelf tab-icon" v-if="item.index === 4"></div>
-        <div class="tab-text" :class="{'remove-text': item.index === 4}">{{item.label}}</div>
+        <div class="tab-text" :class="{'remove-text': item.index === 4}">{{label(item)}}</div>
       </div>
     </div>
 </div>
@@ -16,6 +17,10 @@
 
 <script>
 import { storeShelfMixin } from '../../utils/mixin'
+import { saveBookShelf, removeLocalStorage } from '../../utils/localstorage'
+import { download } from '../../api/store'
+import { removeLocalForage } from '../../utils/localForage'
+
 export default {
   mixins: [storeShelfMixin],
    computed: {
@@ -43,21 +48,63 @@ export default {
             index: 4
           }
         ]
+      },
+      isPrivate() {
+        if (!this.isSelected) {
+          return false
+        } else {
+          // 被选择书籍全部设置私密状态
+          return this.shelfSelected.every(item => item.private)
+        }
       }
   },
+  data () {
+    return {
+      popupMenu: null
+    }
+  },
   methods: {
-    onTabClick(item) {
-      console.log('ontabclick')
-      // 弹窗
-      // this.toast({text: 'hello imooc'}).show()
-      const popup = this.popup({
-        title: '123',
-         btn: [
+    // 任何操作成功后
+    onComplete() {
+        this.hidePopup()
+        this.setIsEditMode(false)
+        saveBookShelf(this.shelfList)
+      },
+      // 设置私密状态
+    setPrivate () {
+      console.log('hhh')
+      let isPrivate
+      //切换私密状态
+      if (this.isPrivate) {
+        isPrivate = false
+      } else {
+        isPrivate = true
+      }
+      // 将选择里的书籍都设为私密
+      this.shelfSelected.forEach(book => {
+        book.private = isPrivate
+      })
+      this.onComplete()
+      // 私密提示框的切换
+      if (isPrivate) {
+        this.simpleToast(this.$t('shelf.setPrivateSuccess'))
+      } else {
+        this.simpleToast(this.$t('shelf.closePrivateSuccess'))
+      }
+    },
+    hidePopup () {
+      this.popupMenu.hide()
+    },
+    // 私密模式
+    showPrivate () {
+      this.popupMenu = this.popup({
+        title: this.isPrivate ? this.$t('shelf.closePrivateTitle') : this.$t('shelf.setPrivateTitle'),
+        btn: [
           {
             text: this.isPrivate ? this.$t('shelf.close') : this.$t('shelf.open'),
             click: () => {
-              // this.setPrivate()
-              popup.hide()
+              // 设置私密书籍
+              this.setPrivate()
             }
           },
           {
@@ -68,6 +115,23 @@ export default {
           }
         ]
       }).show()
+    },
+    onTabClick(item) {
+      if(!this.isSelected) {
+        return
+      }
+      // 根据点击时获取的index来进行展示不同的提示框
+      switch (item.index) {
+        case 1:
+          this.showPrivate()
+          break
+        case 2:
+          break
+        case 3:
+          break
+        case 4:
+          break
+      }
     },
     label(item) {
       switch (item.index) {

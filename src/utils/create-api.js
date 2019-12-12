@@ -12,11 +12,13 @@ Vue.createAPI(GroupDialog, true)
 // 全局mixin更简化
 Vue.mixin({
   methods: {
+    // 提示框
     toast (settings) {
       return this.$createToast({
         $props: settings
       })
     },
+    // 弹出框
     popup (settings) {
       return this.$createPopup({
         $props: settings
