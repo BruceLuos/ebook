@@ -5,8 +5,8 @@
         <!-- 开启私密与关闭私密的不同图标 -->
         <div class="icon-private tab-icon" v-if="item.index === 1 && !isPrivate"></div>
         <div class="icon-private-see tab-icon" v-if="item.index === 1 && isPrivate"></div>
-        <div class="icon-download tab-icon" v-if="item.index === 2 "></div>
-        <div class="icon-download-remove tab-icon" v-if="item.index === 2 "></div>
+        <div class="icon-download tab-icon" v-if="item.index === 2 && !isPrivate"></div>
+        <div class="icon-download-remove tab-icon" v-if="item.index === 2 && isPrivate"></div>
         <div class="icon-move tab-icon" v-if="item.index === 3"></div>
         <div class="icon-shelf tab-icon" v-if="item.index === 4"></div>
         <div class="tab-text" :class="{'remove-text': item.index === 4}">{{label(item)}}</div>
@@ -49,6 +49,7 @@ export default {
           }
         ]
       },
+      // 计算属性是否私密,前两本书私密，然后选择一本不是私密的书，状态变成不是私密
       isPrivate() {
         if (!this.isSelected) {
           return false
@@ -56,7 +57,14 @@ export default {
           // 被选择书籍全部设置私密状态
           return this.shelfSelected.every(item => item.private)
         }
-      }
+      },
+      isDownload() {
+        if (!this.isSelected) {
+          return false
+        } else {
+          return this.shelfSelected.every(item => item.cache)
+        }
+    }
   },
   data () {
     return {
@@ -64,13 +72,17 @@ export default {
     }
   },
   methods: {
+    // 缓存书籍详情
+    downloadSelectedBook () {
+
+    },
     // 任何操作成功后
     onComplete() {
-        this.hidePopup()
-        this.setIsEditMode(false)
-        saveBookShelf(this.shelfList)
-      },
-      // 设置私密状态
+      this.hidePopup()
+      this.setIsEditMode(false)
+      saveBookShelf(this.shelfList)
+    },
+    // 设置私密状态
     setPrivate () {
       console.log('hhh')
       let isPrivate
@@ -91,6 +103,36 @@ export default {
       } else {
         this.simpleToast(this.$t('shelf.closePrivateSuccess'))
       }
+    },
+    // 设置缓存
+    setDownload () {
+      let isDownload
+      if (this.isDownload) {
+        isDownload = false
+      } else {
+        isDownload = true
+      }
+      // 遍历给选中的书籍进行是否已经缓存的切换
+      this.shelfSelected.forEach(book => {
+        book.cache = isDownload
+      })
+      this.downloadSelectedBook()
+      this.onComplete()
+      if (isDownload) {
+        this.simpleToast(this.$t('shelf.setDownloadSuccess'))
+      } else {
+        this.simpleToast(this.$t('shelf.removeDownloadSuccess'))
+      }
+    },
+    // 书籍移除书架
+    removeSelected () {
+      // 遍历已选择书籍数组,将数据与完整书籍列表数据进行比较，过滤掉相同的书籍
+      // 并重新赋值给已选择书籍数值
+      this.shelfSelected.forEach(selected => {
+        this.setShelfList(this.shelfList.filter(book =>book !== selected))
+      })
+      this.setShelfSelected([])
+      this.onComplete()
     },
     hidePopup () {
       this.popupMenu.hide()
@@ -116,6 +158,54 @@ export default {
         ]
       }).show()
     },
+    // 缓存模式
+    showDownload () {
+      this.popupMenu = this.popup({
+        title: this.isDownload ? this.$t('shelf.removeDownloadTitle') : this.$t('shelf.setDownloadTitle'),
+        btn: [
+          {
+            text: this.isDownload ? this.$t('shelf.delete') : this.$t('shelf.open'),
+            click: () => {
+              this.setDownload()
+            }
+          },
+          {
+            text: this.$t('shelf.cancel'),
+            click: () => {
+              this.hidePopup()
+            }
+          }
+        ]
+      }).show()
+    },
+    // 移出书架
+    showRemove () {
+      let title
+      if (this.shelfSelected.length === 1) {
+        title = this.$t('shelf.removeBookTitle').replace('$1', `《${this.shelfSelected[0].title}》`)
+      } else {
+        title = this.$t('shelf.removeBookTitle').replace('$1', this.$t('shelf.selectedBooks'))
+      }
+      this.popupMenu = this.popup({
+        title: title,
+        btn: [
+          {
+            text: this.$t('shelf.removeBook'),
+            type: 'danger',
+            click: () => {
+              this.removeSelected()
+            }
+          },
+          {
+            text: this.$t('shelf.cancel'),
+            click: () => {
+              this.hidePopup()
+            }
+          }
+        ]
+      }).show()
+    },
+    // 编辑模式时底部bar的事件
     onTabClick(item) {
       if(!this.isSelected) {
         return
@@ -126,10 +216,13 @@ export default {
           this.showPrivate()
           break
         case 2:
+          this.showDownload()
           break
         case 3:
+
           break
         case 4:
+          this.showRemove()
           break
       }
     },
