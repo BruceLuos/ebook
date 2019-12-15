@@ -39,6 +39,7 @@
           this.visible = false
         }, this.timeout)
       },
+      // 书籍下载中的持续展示
       continueShow () {
         clearTimeout(this.task)
         this.task = null

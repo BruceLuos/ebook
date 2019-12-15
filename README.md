@@ -371,5 +371,8 @@ vuex添加记录书架中被选择的书籍数组
 选择模式中的底部tabbar
 使用vue-create-api来将复用组件扩展成vue实例中的方法api
 让弹窗popup可以更方便使用
-
+私密状态和缓存的弹窗设计完成
+缓存书籍详情
+setdownload->downloadselectedbook->downloadbook->download
+doanload方法编写axios创建get请求获取下载地址和下载的书籍名成功后存储到浏览器的indexDb数据库中
  -->

@@ -73,8 +73,37 @@ export default {
   },
   methods: {
     // 缓存书籍详情
-    downloadSelectedBook () {
-
+    async downloadSelectedBook () {
+      for(let i = 0; i< this.shelfSelected.length; i++) {
+        // 等到缓存完毕后将书籍缓存状态修改为true
+        await this.downloadBook(this.shelfSelected[i])
+          .then(book => {
+              book.cache = true
+            })
+      }
+    },
+    // 缓存书籍
+    downloadBook () {
+      let text = ''
+      // 提示框
+      const toast = this.toast({
+        text
+      })
+      // 让提示框进行展示
+      toast.continueShow()
+      return new Promise((resolve, reject) => {
+        download(book, book =>{
+          // 下载成功时去除掉toast实例以方便后面的操作创建新的实例更新内容
+          toast.remove()
+          resolve(book)
+        }, reject, progressEvent =>{
+          console.log(progressEvent)
+          const progress = Math.floor(progressEvent.loaded / progressEvent.total * 100) + '%'
+          text = this.$t('shelf.progressDownload').replace('$1', `${book.fileName}.epub(${progress})`)
+          // 提示框中的数据更新
+          toast.updateText(text)
+        })
+      })
     },
     // 任何操作成功后
     onComplete() {
@@ -104,25 +133,33 @@ export default {
         this.simpleToast(this.$t('shelf.closePrivateSuccess'))
       }
     },
-    // 设置缓存
-    setDownload () {
-      let isDownload
-      if (this.isDownload) {
-        isDownload = false
-      } else {
-        isDownload = true
-      }
-      // 遍历给选中的书籍进行是否已经缓存的切换
-      this.shelfSelected.forEach(book => {
-        book.cache = isDownload
+    // 设置缓存 使用async await等到下载完成后才执行下面的步骤
+    async setDownload () {
+       if (this.isDownload) {
+          this.removeSelectedBook()
+        } else {
+          await this.downloadSelectedBook()
+          saveBookShelf(this.shelfList)
+          this.simpleToast(this.$t('shelf.setDownloadSuccess'))
+        }
+    },
+    // 删除选择的已缓存书籍
+    removeSelectedBook() {
+      Promise.all(this.shelfSelected.map(book => this.removeBook(book)))
+        .then(books => {
+          books.map(book => {
+            book.cache = false
+          })
+          saveBookShelf(this.shelfList)
+          this.simpleToast(this.$t('shelf.removeDownloadSuccess'))
+        })
+    },
+    removeBook(book) {
+      return new Promise((resolve, reject) => {
+        removeLocalStorage(`${book.categoryText}/${book.fileName}-info`)
+        removeLocalForage(`${book.fileName}`)
+        resolve(book)
       })
-      this.downloadSelectedBook()
-      this.onComplete()
-      if (isDownload) {
-        this.simpleToast(this.$t('shelf.setDownloadSuccess'))
-      } else {
-        this.simpleToast(this.$t('shelf.removeDownloadSuccess'))
-      }
     },
     // 书籍移除书架
     removeSelected () {
@@ -166,6 +203,7 @@ export default {
           {
             text: this.isDownload ? this.$t('shelf.delete') : this.$t('shelf.open'),
             click: () => {
+              // 开始缓存
               this.setDownload()
             }
           },
