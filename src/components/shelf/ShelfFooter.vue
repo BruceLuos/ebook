@@ -83,7 +83,7 @@ export default {
       }
     },
     // 缓存书籍
-    downloadBook () {
+    downloadBook (book) {
       let text = ''
       // 提示框
       const toast = this.toast({
@@ -96,7 +96,7 @@ export default {
           // 下载成功时去除掉toast实例以方便后面的操作创建新的实例更新内容
           toast.remove()
           resolve(book)
-        }, reject, progressEvent =>{
+        }, reject, progressEvent => {
           console.log(progressEvent)
           const progress = Math.floor(progressEvent.loaded / progressEvent.total * 100) + '%'
           text = this.$t('shelf.progressDownload').replace('$1', `${book.fileName}.epub(${progress})`)
@@ -145,6 +145,7 @@ export default {
     },
     // 删除选择的已缓存书籍
     removeSelectedBook() {
+      //遍历被选中的书籍进行删除，删除后将书籍缓存情况改变
       Promise.all(this.shelfSelected.map(book => this.removeBook(book)))
         .then(books => {
           books.map(book => {
@@ -156,8 +157,11 @@ export default {
     },
     removeBook(book) {
       return new Promise((resolve, reject) => {
+        // 删除阅读记录
         removeLocalStorage(`${book.categoryText}/${book.fileName}-info`)
+        // 删除key值数据
         removeLocalForage(`${book.fileName}`)
+        // 处理结果集
         resolve(book)
       })
     },
