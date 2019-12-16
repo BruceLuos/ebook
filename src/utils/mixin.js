@@ -40,6 +40,7 @@ export const storeShelfMixin = {
     },
     // 获取书架数据
     getShelfList () {
+      // 从localstorege中获得
       let shelfList = getBookShelf()
       if (!shelfList) {
         shelf().then(response => {

@@ -135,6 +135,7 @@ export default {
     },
     // 设置缓存 使用async await等到下载完成后才执行下面的步骤
     async setDownload () {
+       this.onComplete()
        if (this.isDownload) {
           this.removeSelectedBook()
         } else {
