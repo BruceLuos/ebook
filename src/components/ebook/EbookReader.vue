@@ -18,6 +18,7 @@ import { ebookMixin } from '../../utils/mixin'
 import Epub from 'epubjs'
 import { saveFontSize, getFontSize, saveFontFamily, getFontFamily, getTheme, saveTheme, getLocation } from '../../utils/localstorage'
 import { flatten } from '../../utils/book'
+import { getLocalForage } from '../../utils/localForage'
 global.ePub = Epub
 export default {
   mixins: [ebookMixin],
@@ -325,12 +326,25 @@ export default {
     }
   },
   mounted () {
+    const books = this.$route.params.fileName.split('|')
     // 拆分路由地址
-    const fileName = this.$route.params.fileName.split('|').join('/')
-    // console.log(fileName)
-    // 分发fileName在vuex中修改
-    this.setFileName(fileName).then(() => {
-      this.initEpub()
+    const fileName = books[1]
+    // 从缓存indexdb获取书籍数据
+    getLocalForage(fileName, (err, blob) => {
+      if (!err && blob) {
+        this.setFileName(books.join('/')).then(() => {
+          this.initEpub(blob)
+        })
+        console.log('缓存中获取书籍')
+      } else {
+        // 否则的话在网络上获取
+        // 分发fileName在vuex中修改
+        this.setFileName(books.join('/')).then(() => {
+          const url = process.env.VUE_APP_RES_URL + '/epub/' + this.fileName + '.epub'
+          this.initEpub(url)
+        })
+        console.log('网络上获取书籍')
+      }
     })
   }
 }

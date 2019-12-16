@@ -1,5 +1,6 @@
 <template>
   <transition name="fade">
+    <!-- 修改为禁止点击 -->
     <div class="toast-bg-wrapper" @click.prevent v-show="visible">
       <div class="toast-bg">
         <div class="toast-wrapper">
