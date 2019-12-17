@@ -1,5 +1,6 @@
 <template>
   <ebook-dialog :title="title" ref="dialog">
+    <!-- 替换dialog中插槽的位置 -->
     <div class="dialog-list-wrapper" v-if="!ifNewGroup">
       <div class="dialog-list-item"
            :class="{'is-add': item.edit  ? item.edit === 1 : false}"
@@ -13,10 +14,13 @@
         </div>
       </div>
     </div>
+    <!-- 新增分组时展现 -->
     <div class="dialog-new-group-wrapper" v-else>
+      <!-- 标题 -->
       <div class="dialog-input-title-wrapper">
         <span class="dialog-input-title">{{$t('shelf.groupName')}}</span>
       </div>
+      <!-- 输入新分组名称 -->
       <div class="dialog-input-wrapper">
         <div class="dialog-input-inner-wrapper">
           <input type="text" class="dialog-input" v-model="newGroupName" ref="dialogInput">
@@ -26,6 +30,7 @@
         </div>
       </div>
     </div>
+    <!-- 替换dialog中btn的默认内容 -->
     <div slot="btn" class="group-dialog-btn-wrapper">
       <div class="dialog-btn" @click="hide">{{$t('shelf.cancel')}}</div>
       <div class="dialog-btn" @click="createNewGroup" :class="{'is-empty': newGroupName && newGroupName.length === 0}"
@@ -98,30 +103,38 @@
           this.ifNewGroup = false
         }, 200)
       },
+      // 分组列表执行方法
       onGroupClick(item) {
+        // 当为1时创建新的分组
         if (item.edit && item.edit === 1) {
           this.ifNewGroup = true
         } else if (item.edit && item.edit === 2) {
+          // 当为2时移除分组
           this.moveOutFromGroup(item)
         } else {
+          // 移动到选择的分组
           this.moveToGroup(item)
         }
       },
       clear() {
         this.newGroupName = ''
       },
+      // 移动到分组
       moveToGroup(group) {
         this.setShelfList(this.shelfList
           .filter(book => {
+            // 将选择的书籍从书籍列表去掉
             if (book.itemList) {
               book.itemList = book.itemList.filter(subBook => this.shelfSelected.indexOf(subBook) < 0)
             }
             return this.shelfSelected.indexOf(book) < 0
           }))
           .then(() => {
+            // 将当前分组书籍列表与被选择的书籍列表进行合并
             if (group && group.itemList) {
               group.itemList = [...group.itemList, ...this.shelfSelected]
             }
+            // 刷新id
             group.itemList.forEach((item, index) => {
               item.id = index + 1
             })
@@ -129,6 +142,7 @@
             this.onComplete()
           })
       },
+      // 移除分组
       moveOutFromGroup() {
         this.moveOutOfGroup(this.onComplete)
       },
@@ -141,16 +155,21 @@
           this.onComplete()
         } else {
           const group = {
+            // id为书架书籍列表中的倒数第二个再加一
             id: this.shelfList[this.shelfList.length - 2].id + 1,
             itemList: [],
             selected: false,
             title: this.newGroupName,
             type: 2
           }
+          // 移除加号
           let list = removeAddFromShelf(this.shelfList)
+          // 将新分组添加到书架列表中
           list.push(group)
+          // 重新添加加号
           list = appendAddToShelf(list)
           this.setShelfList(list).then(() => {
+            // 将选择到的书籍加入分组中
             this.moveToGroup(group)
           })
         }

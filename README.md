@@ -375,4 +375,9 @@ vuex添加记录书架中被选择的书籍数组
 缓存书籍详情
 setdownload->downloadselectedbook->downloadbook->download
 doanload方法编写axios创建get请求获取下载地址和下载的书籍名成功后存储到浏览器的indexDb数据库中
+书架数据的缓存清除clearcache
+离线阅读功能,修改ebookreader中的getlocalforage首先在indexdb中判断是否存在书籍,没有就从网络上获取
+
+书架分组功能
+添加新的dialog和shelfgroupdialog组件，里面引入两个插槽
  -->
