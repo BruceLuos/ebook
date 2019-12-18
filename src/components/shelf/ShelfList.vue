@@ -1,5 +1,6 @@
 <template>
   <div class="shelf-list" :style="{top: shelfListTop}">
+    <!-- 使用这个可以给每个遍历元素都加上id或class -->
     <transition-group name="list"
                       tag="div"
                       id="shelf-list">
@@ -65,6 +66,7 @@ computed: {
       width: 33.33%;
       padding: px2rem(15);
       box-sizing: border-box;
+      // 过渡动画,添加在需要变化的元素中
       &.list-leave-active {
         display: none;
       }

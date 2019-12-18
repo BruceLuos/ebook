@@ -34,6 +34,7 @@ export const storeShelfMixin = {
     // 获取分类列表数据
     getCategoryList (title) {
       this.getShelfList().then(() => {
+        //  筛选出满足条件的分类列表数据
         const categoryList = this.shelfList.filter(book => book.type === 2 && book.title === title)[0]
         this.setShelfCategory(categoryList)
       })

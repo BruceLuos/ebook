@@ -6,8 +6,8 @@ const store = {
     shelfList: [], // 书架图书列表
     shelfSelected: [], // 书架图书选中的列表
     shelfTitleVisible: true, // 书架标题的显示状态
-    shelfCategory: [],
-    currentType: 1
+    shelfCategory: [], // 书架分类列表数据
+    currentType: 1 // 当前书架数据类型， 1为书架数据，2为书架分类列表数据
   },
   mutations: {
     SET_HOT_SEARCH_OFFSETY (state, offsetY) {

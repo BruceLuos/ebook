@@ -2,8 +2,7 @@
   <div class='store-shelf'>
     <shelf-title></shelf-title>
     <scroll :top="0" :bottom="scrollBottom" ref="scroll" class="store-shelf-store-wrapper" @onScroll="onScroll">
-      <shelf-search></shelf-search>
-      <shelf-list :data="shelfList"></shelf-list>
+      <shelf-list :data="shelfCategory.itemList" :top="42"></shelf-list>
     </scroll>
     <shelf-footer></shelf-footer>
   </div>
@@ -12,7 +11,6 @@
 <script>
 import ShelfTitle from '../../components/shelf/ShelfTitle'
 import Scroll from '../../components/common/Scroll'
-import ShelfSearch from '../../components/shelf/ShelfSearch'
 import ShelfList from '../../components/shelf/ShelfList'
 import ShelfFooter from '../../components/shelf/ShelfFooter'
 import { storeShelfMixin } from '../../utils/mixin'
@@ -21,7 +19,6 @@ export default {
   components: {
     ShelfTitle,
     Scroll,
-    ShelfSearch,
     ShelfList,
     ShelfFooter
   },
@@ -46,11 +43,9 @@ export default {
     }
   },
   mounted() {
-    this.getShelfList()
-    // 设置书架分类列表为空
-    this.setShelfCategory([])
-    // 设置当前书架类型
-    this.setCurrentType(1)
+    this.getCategoryList(this.$route.query.title)
+    // 将数据类型设为分类
+    this.setCurrentType(2)
   }
 }
 </script>
