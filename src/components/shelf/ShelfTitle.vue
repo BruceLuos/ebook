@@ -71,6 +71,7 @@ export default {
         this.setShelfSelected([])
         this.shelfList.forEach(item => {
           item.selected = false
+          // 如果item中还存在数据也就是存在分类列表数据遍历让他们的选择情况为false
           if(item.itemList) {
             item.itemList.forEach(subItem => {
               subItem.selected = false
