@@ -1,6 +1,6 @@
 <template>
   <div class='store-shelf'>
-    <shelf-title></shelf-title>
+    <shelf-title :title="$t('shelf.title')"></shelf-title>
     <scroll :top="0" :bottom="scrollBottom" ref="scroll" class="store-shelf-store-wrapper" @onScroll="onScroll">
       <shelf-search></shelf-search>
       <shelf-list :data="shelfList"></shelf-list>

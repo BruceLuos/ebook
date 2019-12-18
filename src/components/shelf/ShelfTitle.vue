@@ -3,16 +3,20 @@
     <div class='shelf-title'  :class="{'hide-shadow': ifHideShadow}" v-show="shelfTitleVisible">
       <!-- 标题 -->
       <div class="shelf-title-wrapper">
-        <span class="shelf-title-text">{{$t('shelf.title')}}</span>
+        <span class="shelf-title-text">{{title}}</span>
         <span class="shelf-title-sub-text" v-show="isEditMode">{{selectedText}}</span>
       </div>
       <!-- 清除缓存 -->
-      <div class="shelf-title-btn-wrapper shelf-title-left">
+      <div class="shelf-title-btn-wrapper shelf-title-left" v-if="!ifShowBack">
         <span class="shelf-title-btn-text" @click="clearCache">{{$t('shelf.clearCache')}}</span>
       </div>
       <!-- 编辑模式 -->
       <div class="shelf-title-btn-wrapper shelf-title-right">
         <span class="shelf-title-btn-text" @click="onEditClick">{{isEditMode ? $t('shelf.cancel') : $t('shelf.edit')}}</span>
+      </div>
+      <!-- 返回按钮 -->
+      <div class="shelf-title-btn-wrapper shelf-title-left" v-if="ifShowBack">
+        <span class="icon-back" @click="back"></span>
       </div>
     </div>
   </transition>
@@ -24,6 +28,14 @@ import { clearLocalStorage } from '../../utils/localstorage'
 import { clearLocalForage } from '../../utils/localForage'
 export default {
   mixins: [storeShelfMixin],
+  props:{
+    ifShowBack: {
+      type: Boolean,
+      default: false
+    },
+    title: String
+
+  },
   watch: {
     offsetY(offsetY) {
       if (offsetY > 0) {
@@ -50,11 +62,21 @@ export default {
     }
   },
   methods: {
+    back () {
+      this.$router.go(-1)
+    },
     onEditClick () {
       if(!this.isEditMode) {
         // 不是编辑模式的时候清空书架被选择列表
         this.setShelfSelected([])
-        this.shelfList.forEach(item => item.selected = false)
+        this.shelfList.forEach(item => {
+          item.selected = false
+          if(item.itemList) {
+            item.itemList.forEach(subItem => {
+              subItem.selected = false
+            })
+          }
+        })
       }
       this.setIsEditMode(!this.isEditMode)
     },
@@ -111,6 +133,10 @@ export default {
     .shelf-title-btn-text{
       font-size: px2rem(14);
       color: #666;
+    }
+     .icon-back {
+        font-size: px2rem(20);
+        color: #666;
     }
     &.shelf-title-left{
       left: 0;

@@ -56,7 +56,7 @@ export default {
       }
     }
   }
-  .shelf-item-categroy-bg {
+   .shelf-item-category-bg {
     width: 100%;
     height: 100%;
     font-size: px2rem(30);

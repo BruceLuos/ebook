@@ -1,9 +1,16 @@
 <template>
   <div class='store-shelf'>
-    <shelf-title></shelf-title>
-    <scroll :top="0" :bottom="scrollBottom" ref="scroll" class="store-shelf-store-wrapper" @onScroll="onScroll">
+    <shelf-title :title="shelfCategory.title" :ifShowBack="true"></shelf-title>
+    <scroll
+    :top="0"
+    :bottom="scrollBottom"
+    ref="scroll"
+    class="store-shelf-store-wrapper"
+    @onScroll="onScroll"
+    v-if="shelfCategory.itemList && shelfCategory.itemList.length > 0">
       <shelf-list :data="shelfCategory.itemList" :top="42"></shelf-list>
     </scroll>
+    <div class="store-shelf-empty-view" v-else>{{$t('shelf.groupNone')}}'</div>
     <shelf-footer></shelf-footer>
   </div>
 </template>
@@ -64,6 +71,16 @@ export default {
     left: 0;
     z-index: 101;
     background: white;
+  }
+  .store-shelf-empty-view{
+    position:absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-size: px2rem(14);
+    color: #cccccc;
+    @include center;
   }
 }
 </style>
