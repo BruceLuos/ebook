@@ -99,12 +99,15 @@
     },
     methods: {
       show() {
+        // 接收从分组书架title传来的showNewGroup和groupName重新给分组命名
+        // 并将新分组设为true
         this.ifNewGroup = this.showNewGroup
         this.newGroupName = this.groupName
         this.$refs.dialog.show()
       },
       hide() {
         this.$refs.dialog.hide()
+        // 上面的hide有0.2秒的动画延迟
         setTimeout(() => {
           this.ifNewGroup = false
         }, 200)
@@ -180,13 +183,16 @@
       },
       // 新建分组
       createNewGroup() {
+        // 不存在新分组名字，或者为空
         if (!this.newGroupName || this.newGroupName.length === 0) {
           return
         }
+        // 当存在新分组时修改分组的title
         if (this.showNewGroup) {
           this.shelfCategory.title = this.newGroupName
           this.onComplete()
         } else {
+          // 当不存在时创建新分组
           const group = {
             // id为书架书籍列表中的倒数第二个再加一
             id: this.shelfList[this.shelfList.length - 2].id + 1,
@@ -201,8 +207,9 @@
           list.push(group)
           // 重新添加加号
           list = appendAddToShelf(list)
+          // 更新主书架数据
           this.setShelfList(list).then(() => {
-            // 将选择到的书籍加入分组中
+            // 将选择到的书籍直接加入分组中
             this.moveToGroup(group)
           })
         }

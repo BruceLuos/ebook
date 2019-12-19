@@ -7,10 +7,11 @@
   </transition>
   <!-- 弹窗详情 -->
   <transition name="popup-slide-up">
+    <!-- 可以向弹窗传入两个值title、btn对象 -->
     <div class="popup-wrapper" v-show="visible">
       <div class="popup-title" v-if="title && title.length > 0">{{title}}</div>
       <div class="popup-btn"
-           :class="{'danger':item.type==='danger'}"
+           :class="{'danger':item.type ==='danger'}"
            v-for="(item, index) in btn"
            :key="index"
            @click="item.click">{{item.text}}

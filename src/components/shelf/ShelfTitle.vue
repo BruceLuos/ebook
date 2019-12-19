@@ -97,14 +97,17 @@ export default {
   methods: {
       onComplete() {
         this.hidePopup()
+        // 更新书架数据
         this.setShelfList(this.shelfList.filter(book => book.id !== this.shelfCategory.id)).then(() => {
           saveBookShelf(this.shelfList)
           this.$router.go(-1)
           this.setIsEditMode(false)
         })
       },
+      // 删除分组
       deleteGroup() {
         if (!this.emptyCategory) {
+          // 将分组书架列表中的数据全选进行删除
           this.setShelfSelected(this.shelfCategory.itemList)
           this.moveOutOfGroup(this.onComplete)
         } else {
@@ -113,6 +116,7 @@ export default {
       },
       changeGroupName() {
         this.hidePopup()
+        // 打开分组目录
         this.dialog({
           showNewGroup: true,
           groupName: this.shelfCategory.title
@@ -128,13 +132,17 @@ export default {
           click: onClick
         }
       },
+      // 展示删除popup
       showDeleteGroup() {
+        // 隐藏当前popup创建新的删除确定popup
         this.hidePopup()
+        // 上面动画延迟两秒
         setTimeout(() => {
           this.popupMenu = this.popup({
             title: this.$t('shelf.deleteGroupTitle'),
             btn: [
               this.createPopupBtn(this.$t('shelf.confirm'), () => {
+                // 确定删除
                 this.deleteGroup()
               }, 'danger'),
               this.popupCancelBtn
@@ -142,8 +150,10 @@ export default {
           }).show()
         }, 200)
       },
+      // 修改分组
       changeGroup() {
         this.popupMenu = this.popup({
+          // 三个按钮，改变分组，删除分组，取消按钮
           btn: [
             this.createPopupBtn(this.$t('shelf.editGroupName'), () => {
               this.changeGroupName()
