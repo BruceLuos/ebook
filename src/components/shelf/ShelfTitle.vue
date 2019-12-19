@@ -7,16 +7,22 @@
         <span class="shelf-title-sub-text" v-show="isEditMode">{{selectedText}}</span>
       </div>
       <!-- 清除缓存 -->
-      <div class="shelf-title-btn-wrapper shelf-title-left" v-if="!ifShowBack">
+      <div class="shelf-title-btn-wrapper shelf-title-left" v-if="showClear">
         <span class="shelf-title-btn-text" @click="clearCache">{{$t('shelf.clearCache')}}</span>
       </div>
       <!-- 编辑模式 -->
-      <div class="shelf-title-btn-wrapper shelf-title-right">
+      <div class="shelf-title-btn-wrapper shelf-title-right" v-if="showEdit">
         <span class="shelf-title-btn-text" @click="onEditClick">{{isEditMode ? $t('shelf.cancel') : $t('shelf.edit')}}</span>
       </div>
       <!-- 返回按钮 -->
-      <div class="shelf-title-btn-wrapper shelf-title-left" v-if="ifShowBack">
+      <div class="shelf-title-btn-wrapper shelf-title-left" v-if="showBack">
         <span class="icon-back" @click="back"></span>
+      </div>
+      <!-- 分组组件显示的编辑内容 -->
+      <div class="shelf-title-btn-wrapper"
+           :class="{'shelf-title-left': changeGroupLeft, 'shelf-title-right': changeGroupRight}" @click="changeGroup"
+           v-if="showChangeGroup">
+        <span class="shelf-title-btn-text">{{$t('shelf.editGroup')}}</span>
       </div>
     </div>
   </transition>
@@ -51,22 +57,110 @@ export default {
     }
   },
   computed: {
-    selectedText() {
-      // 判断选择的书籍数量进行显示
-      const selectedNumber =  this.shelfSelected ? this.shelfSelected.length : 0
-      return selectedNumber <= 0
-      ? this.$t('shelf.selectBook')
-      : selectedNumber === 1
-      ? this.$t('shelf.haveSelectedBook').replace('$1',selectedNumber)
-      : this.$t('shelf.haveSelectedBook').replace('$1',selectedNumber)
-    }
+    // 根据书架类型和编辑状态进行切换分组组件的状态
+    emptyCategory() {
+      // 分组书架为空时
+        return !this.shelfCategory || !this.shelfCategory.itemList || this.shelfCategory.itemList.length === 0
+      },
+      showEdit() {
+        // 展示编辑状态要求为主书架或者分组书架不为空
+        return this.currentType === 1 || !this.emptyCategory
+      },
+      showClear() {
+        return this.currentType === 1
+      },
+      showBack() {
+        // 不在编辑状态下并且处于分组书架中
+        return this.currentType === 2 && !this.isEditMode
+      },
+      showChangeGroup() {
+        // 编辑状态下并且处于分组书架中
+        return this.currentType === 2 && (this.isEditMode || this.emptyCategory)
+      },
+      changeGroupLeft() {
+        return !this.emptyCategory
+      },
+      changeGroupRight() {
+        return this.emptyCategory
+      },
+      selectedText() {
+        // 判断选择的书籍数量进行显示
+        const selectedNumber = this.shelfSelected ? this.shelfSelected.length : 0
+        return selectedNumber <= 0 ? this.$t('shelf.selectBook') : (selectedNumber === 1 ? this.$t('shelf.haveSelectedBook').replace('$1', selectedNumber) : this.$t('shelf.haveSelectedBooks').replace('$1', selectedNumber))
+      },
+      popupCancelBtn() {
+        return this.createPopupBtn(this.$t('shelf.cancel'), () => {
+          this.hidePopup()
+        })
+      }
   },
   methods: {
+      onComplete() {
+        this.hidePopup()
+        this.setShelfList(this.shelfList.filter(book => book.id !== this.shelfCategory.id)).then(() => {
+          saveBookShelf(this.shelfList)
+          this.$router.go(-1)
+          this.setIsEditMode(false)
+        })
+      },
+      deleteGroup() {
+        if (!this.emptyCategory) {
+          this.setShelfSelected(this.shelfCategory.itemList)
+          this.moveOutOfGroup(this.onComplete)
+        } else {
+          this.onComplete()
+        }
+      },
+      changeGroupName() {
+        this.hidePopup()
+        this.dialog({
+          showNewGroup: true,
+          groupName: this.shelfCategory.title
+        }).show()
+      },
+      hidePopup() {
+        this.popupMenu.hide()
+      },
+      createPopupBtn(text, onClick, type = 'normal') {
+        return {
+          text: text,
+          type: type,
+          click: onClick
+        }
+      },
+      showDeleteGroup() {
+        this.hidePopup()
+        setTimeout(() => {
+          this.popupMenu = this.popup({
+            title: this.$t('shelf.deleteGroupTitle'),
+            btn: [
+              this.createPopupBtn(this.$t('shelf.confirm'), () => {
+                this.deleteGroup()
+              }, 'danger'),
+              this.popupCancelBtn
+            ]
+          }).show()
+        }, 200)
+      },
+      changeGroup() {
+        this.popupMenu = this.popup({
+          btn: [
+            this.createPopupBtn(this.$t('shelf.editGroupName'), () => {
+              this.changeGroupName()
+            }),
+            this.createPopupBtn(this.$t('shelf.deleteGroup'), () => {
+              this.showDeleteGroup()
+            }, 'danger'),
+            this.popupCancelBtn
+          ]
+        }).show()
+      },
     back () {
       this.$router.go(-1)
       // 取消后退后的编辑模式
       this.setIsEditMode(false)
     },
+    // 编辑模式的切换
     onEditClick () {
       if(!this.isEditMode) {
         // 不是编辑模式的时候清空书架被选择列表

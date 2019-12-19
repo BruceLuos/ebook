@@ -178,6 +178,7 @@
         })
 
       },
+      // 新建分组
       createNewGroup() {
         if (!this.newGroupName || this.newGroupName.length === 0) {
           return
