@@ -62,6 +62,7 @@ export const storeShelfMixin = {
         }
         return book
       })).then(() => {
+        // 重排书籍的id
         const list = computeId(appendAddToShelf([].concat(
           removeAddFromShelf(this.shelfList), ...this.shelfSelected)))
         this.setShelfList(list).then(() => {

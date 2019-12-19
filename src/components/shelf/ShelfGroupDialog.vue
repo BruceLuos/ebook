@@ -43,7 +43,7 @@
 <script>
   import EbookDialog from '../common/Dialog'
   import { storeShelfMixin } from '../../utils/mixin'
-  import { removeAddFromShelf, appendAddToShelf } from '../../utils/store'
+  import { removeAddFromShelf, appendAddToShelf, computeId } from '../../utils/store'
   import { saveBookShelf } from '../../utils/localstorage'
 
   export default {
@@ -60,24 +60,30 @@
       groupName: String
     },
     computed: {
+      // 是否在分组书架中
       isInGroup() {
         return this.currentType === 2
       },
+      // 默认的dialog列表数据
       defaultCategory() {
         return [
           {
+            // 新增分组
             title: this.$t('shelf.newGroup'),
             edit: 1
           },
           {
+            // 移除分组
             title: this.$t('shelf.groupOut'),
             edit: 2
           }
         ]
       },
+      // 分组书架书籍数据
       category() {
         return this.shelfList.filter(item => item.type === 2)
       },
+      // 将默认分组书架数据与现有的分组书架数据合并
       categoryList() {
         return [...this.defaultCategory, ...this.category]
       },
@@ -105,11 +111,13 @@
       },
       // 分组列表执行方法
       onGroupClick(item) {
+         console.log(this.categoryList)
         // 当为1时创建新的分组
         if (item.edit && item.edit === 1) {
           this.ifNewGroup = true
         } else if (item.edit && item.edit === 2) {
           // 当为2时移除分组
+          // console.log(this.categoryList)
           this.moveOutFromGroup(item)
         } else {
           // 移动到选择的分组
@@ -123,7 +131,7 @@
       moveToGroup(group) {
         this.setShelfList(this.shelfList
           .filter(book => {
-            // 将选择的书籍从书籍列表去掉
+            // 将选择的书籍从书籍列表或分组书籍列表去掉
             if (book.itemList) {
               book.itemList = book.itemList.filter(subBook => this.shelfSelected.indexOf(subBook) < 0)
             }
@@ -143,8 +151,32 @@
           })
       },
       // 移除分组
-      moveOutFromGroup() {
-        this.moveOutOfGroup(this.onComplete)
+      moveOutFromGroup(item) {
+        // this.moveOutOfGroup(this.onComplete)
+        // console.log(item)
+        // 遍历筛选出没有被选择的书籍
+        this.shelfList.map(book => {
+          if(book.type === 2 && book.itemList) {
+            book.itemList = book.itemList.filter(subBook => !subBook.selected)
+          }
+          return book
+        }).then(() => {
+          // 筛选完后移除主书架中的添加图案
+          let list = removeAddFromShelf(this.shelfList)
+          // 并将选择去除的书籍与主书架中的书籍进行合并
+          list = [].concat(list,...this.shelfSelected)
+          // 重新添加添加图案
+          list = appendAddToShelf(list)
+          // 将书架中的书籍重新排序
+          list = computeId(list)
+          // 更新vuex中书架数据
+          this.setShelfList(list).then(() => {
+            this.simpleToast(this.$t('shelf.moveBookoutSuccess'))
+            this.onComplete()
+          })
+
+        })
+
       },
       createNewGroup() {
         if (!this.newGroupName || this.newGroupName.length === 0) {
