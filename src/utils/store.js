@@ -9,7 +9,7 @@ export function addToShelf (book) {
   shelfList = appendAddToShelf(shelfList)
   saveBookShelf(shelfList)
 }
-
+// 移出书架
 export function removeFromBookShelf (book) {
   return getBookShelf().filter(item => {
     if (item.itemList) {
@@ -52,6 +52,7 @@ export function findBook (fileName) {
   return flatBookList(bookList).find(item => item.fileName === fileName)
 }
 
+// 重新计算书籍id
 export function computeId (list) {
   return list.map((book, index) => {
     if (book.type !== 3) {
@@ -63,7 +64,7 @@ export function computeId (list) {
     return book
   })
 }
-
+// 书籍详情页
 export function gotoBookDetail (vue, book) {
   vue.$router.push({
     path: '/book/detail',

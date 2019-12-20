@@ -166,20 +166,23 @@
           path: `/ebook/${this.categoryText}|${this.fileName}`
         })
       },
+      // 听书
       trialListening() {
+        // 在indexdb数据库中查找是否存有书籍blob数据
         getLocalForage(this.bookItem.fileName, (err, blob) => {
           if (!err && blob && blob instanceof Blob) {
             this.$router.push({
-              path: '/store/speaking',
+              path: '/book/speaking',
               query: {
                 fileName: this.bookItem.fileName
               }
             })
           } else {
             this.$router.push({
-              path: '/store/speaking',
+              path: '/book/speaking',
               query: {
                 fileName: this.bookItem.fileName,
+                // opf文字解析
                 opf: this.opf
               }
             })

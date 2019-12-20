@@ -27,6 +27,9 @@ export default new Router({
         path: 'category',
         component: () => import('./views/store/StoreCategory.vue')
       }, {
+        path: 'speaking',
+        component: () => import('./views/store/StoreSpeaking.vue')
+      }, {
         path: 'home',
         component: () => import('./views/store/bookHome.vue')
       }, {
