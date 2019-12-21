@@ -100,10 +100,12 @@
       SpeakWindow
     },
     computed: {
+      // 当前分组数
       currentMinute() {
         const m = Math.floor(this.currentPlayingTime / 60)
         return m < 10 ? '0' + m : m
       },
+      // 当前秒数
       currentSecond() {
         const s = Math.floor(this.currentPlayingTime - parseInt(this.currentMinute) * 60)
         return s < 10 ? '0' + s : s
@@ -125,8 +127,10 @@
         return s < 10 ? '0' + s : s
       },
       playInfo() {
+        // audio可以播放的时候
         if (this.audioCanPlay) {
           return {
+            // 将数据付给playinfo对象
             currentMinute: this.currentMinute,
             currentSecond: this.currentSecond,
             totalMinute: this.totalMinute,
@@ -141,6 +145,7 @@
       lang() {
         return this.metadata ? this.metadata.language : ''
       },
+      // 禁止滚动
       disableScroll() {
         if (this.$refs.speakWindow) {
           return this.$refs.speakWindow.visible
@@ -221,6 +226,7 @@
           const json = JSON.parse(xmlDoc)
           if (json.path) {
             this.$refs.audio.src = json.path
+            console.log('设置src')
             this.continuePlay()
           } else {
             this.showToast('播放失败，未生成链接')
@@ -285,6 +291,7 @@
         })
         // 查看是否存在chapter
         if (this.chapter) {
+          console.log(this.rendition)
           this.section = this.book.spine.get(this.chapter.href)
           this.rendition.display(this.section.href).then(section => {
             const currentPage = this.rendition.currentLocation()
@@ -338,22 +345,32 @@
         this.isPlaying = false
         this.playStatus = 2
       },
+      // 播放结束时
       onAudioEnded() {
+        // 重置状态
         this.resetPlay()
+        // 重置当前播放时间
         this.currentPlayingTime = this.$refs.audio.currentTime
+        // 进度百分比
         const percent = Math.floor((this.currentPlayingTime / this.totalPlayingTime) * 100)
         this.$refs.speakWindow.refreshProgress(percent)
       },
+      // 播放时间更新
       onTimeUpdate() {
         this.currentPlayingTime = this.$refs.audio.currentTime
         const percent = Math.floor((this.currentPlayingTime / this.totalPlayingTime) * 100)
+        // 更新speakwindow组件里的进度条
         this.$refs.speakWindow.refreshProgress(percent)
       },
+      // 播放时
       onCanPlay() {
+        // audio的src设置完后会自动调用这个方法
+        console.log('can play')
         this.audioCanPlay = true
         this.currentPlayingTime = this.$refs.audio.currentTime
         this.totalPlayingTime = this.$refs.audio.duration
       },
+       // 获取书籍数据
       findBookFromList(fileName) {
         flatList().then(response => {
           if (response.status === 200) {
@@ -365,6 +382,7 @@
           }
         })
       },
+      // 初始化书籍
       init() {
         const fileName = this.$route.query.fileName
         if (!this.bookItem) {
@@ -388,6 +406,7 @@
           this.findBookFromList(fileName)
         }
       },
+      // 下载书籍
       downloadBook(fileName) {
         download(
           this.bookItem,
@@ -400,6 +419,7 @@
             })
           })
       },
+      // 解析书籍
       parseBook(blob) {
         this.book = new Epub(blob)
         this.book.loaded.metadata.then(metadata => {
@@ -434,6 +454,7 @@
       toggleContent() {
         this.ifShowContent = !this.ifShowContent
       },
+      // 展示书籍
       display() {
         const height = window.innerHeight * 0.9 - realPx(40) - realPx(54) - realPx(46) - realPx(48) - realPx(60) - realPx(44)
         this.rendition = this.book.renderTo('read', {

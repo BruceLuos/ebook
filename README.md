@@ -397,4 +397,12 @@ doanload方法编写axios创建get请求获取下载地址和下载的书籍名�
 听书功能开发
 本质上是获取speak中获得的text文本然后进行get请求获取声音数据进行读书
 播放器逻辑
+在createvoice获取text进行api请求后设置audio的src
+<audio @canplay="onCanPlay"
+             @timeupdate="onTimeUpdate"
+             @ended="onAudioEnded"
+             ref="audio"></audio>
+我们绑定audio自带的事件canplay和timeupdate和ended从而我们可以在上面编写内容获取audio中需要的播放信息currentTime，duration等
+并且在播放器面板speakwindow中刷新进度条refreshprogress
+播放器面板speakwindow也能进行书籍文本章节等的更新
  -->

@@ -3,9 +3,11 @@
     <div class="book-speak-mask-wrapper" @click.stop.prevent="hide" v-show="visible">
       <transition name="popup-slide-up">
         <div class="book-speak-mask-card-wrapper" v-show="speakCardVisible" @click.stop.prevent="hide">
+          <!--下拉图标 -->
           <div class="pulldown-icon-wrapper" @click="hide">
             <span class="icon-pull_down"></span>
           </div>
+          <!-- 卡片标题 -->
           <div class="card-title-wrapper">
             <div class="icon-speak-wrapper">
               <span class="icon-speak"></span>
@@ -17,12 +19,14 @@
               <span class="read-fulltext">{{$t('speak.read')}}</span>
             </div>
           </div>
+          <!-- 章节标题 -->
           <div class="card-section-title-wrapper">
             <div class="card-section-title-text">{{title}}</div>
             <div class="card-section-sub-title-text" v-if="currentSectionIndex">{{currentSectionIndex}} /
               {{currentSectionTotal}}
             </div>
           </div>
+          <!-- 进度条 -->
           <div class="setting-progress">
             <div class="progress-wrapper">
               <input class="progress" type="range"
@@ -43,6 +47,7 @@
               </div>
             </div>
           </div>
+          <!-- 播放操作栏 -->
           <div class="playing-wrapper">
             <div class="icon-settings-wrapper">
               <span class="icon-settings"></span>
@@ -60,14 +65,17 @@
               <div class="clock-text">{{$t('speak.timing')}}</div>
             </div>
           </div>
+          <!-- 科大讯飞提示栏 -->
           <div class="read-apply-wrapper">
             {{$t('speak.apply')}}
           </div>
+          <!-- 当前章节显示 -->
           <div class="read-title-wrapper">
             <span class="line"></span>
             <div class="read-title-text">{{$t('speak.current')}}</div>
             <span class="line"></span>
           </div>
+          <!-- 书籍大概内容显示 -->
           <div class="book-wrapper" ref="bookWrapper">
             <div id="book-read"></div>
           </div>
@@ -99,10 +107,12 @@
       }
     },
     methods: {
+      // 提供给父组件进行进度的刷新
       refreshProgress(p) {
         this.progress = p
         this.$refs.progress.style.backgroundSize = `${this.progress}% 100%`
       },
+      // 书籍文本的更新
       updateText(promise) {
         promise.then(() => {
           const currentPage = this.rendition.currentLocation()
@@ -123,9 +133,12 @@
       togglePlay() {
         this.$parent.togglePlay()
       },
+      // 前一章
       prev() {
         if (this.currentSectionIndex > 1) {
           this.updateText(this.rendition.prev())
+          // 子传父修改currentSectionIndex
+          console.log(this.currentSectionIndex)
           this.$emit('update:currentSectionIndex', this.currentSectionIndex - 1)
           this.$parent.resetPlay()
           setTimeout(() => {
@@ -143,6 +156,7 @@
           }, 500)
         }
       },
+      // 预览展示书籍
       display() {
         if (!this.rendition) {
           this.rendition = this.book.renderTo('book-read', {
@@ -157,7 +171,9 @@
       },
       onProgressChange(progress) {
       },
+      // 进度长度改变
       onProgressInput(progress) {
+        // 获取进度条的value值进行刷新进度
         this.progress = progress
         this.$refs.progress.style.backgroundSize = `${this.progress}% 100%`
       },
@@ -166,6 +182,7 @@
         this.visible = false
       },
       show() {
+        console.log('点击speakbtoom组件时执行这个方法展示speakMask')
         this.visible = true
         this.speakCardVisible = true
         this.refresh()
