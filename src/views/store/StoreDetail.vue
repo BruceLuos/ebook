@@ -83,6 +83,9 @@
   import { px2rem, realPx } from '../../utils/utils'
   import Epub from 'epubjs'
   import { getLocalForage } from '../../utils/localForage'
+  import { removeFromBookShelf, addToShelf } from '../../utils/store'
+  import { storeShelfMixin } from '../../utils/mixin'
+  import { getBookShelf, saveBookShelf } from '../../utils/localstorage'
 
   global.ePub = Epub
 
@@ -155,6 +158,14 @@
     },
     methods: {
       addOrRemoveShelf() {
+        if (this.inBookShelf) {
+          this.setShelfList(removeFromBookShelf(this.bookItem)).then(() => {
+            saveBookShelf(this.shelfList)
+          })
+        } else {
+          addToShelf(this.bookItem)
+          this.setShelfList(getBookShelf())
+        }
       },
       showToast(text) {
         this.toastText = text
@@ -163,7 +174,7 @@
       // 阅读书籍
       readBook() {
         this.$router.push({
-          path: `/ebook/${this.categoryText}|${this.fileName}`
+          path: `/ebook/${this.bookItem.categoryText}|${this.fileName}`
         })
       },
       // 听书
@@ -250,10 +261,13 @@
           }).then(response => {
             if (response.status === 200 && response.data.error_code === 0 && response.data.data) {
               const data = response.data.data
+              // booitem为请求回来的数据对象
               this.bookItem = data
               this.cover = this.bookItem.cover
               let rootFile = data.rootFile
+              // console.log(rootFile)
               if (rootFile.startsWith('/')) {
+                // 截取/后面的所有内容
                 rootFile = rootFile.substring(1, rootFile.length)
               }
               // 拼接opf

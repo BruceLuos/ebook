@@ -297,7 +297,7 @@ export default {
             // console.log(loc)
             this.navigation.forEach(nav => {
               if (nav.href) {
-                const href = nav.href.match(/^(.*)\.html$/)[1]
+                const href = nav.href.match(/^(.*)\.html$/)
                 // console.log(href)
                 // 根据locations和navigation中过滤数据中相同名字的数据加入pagelist
                 if (href === loc) {
@@ -340,7 +340,7 @@ export default {
         // 否则的话在网络上获取
         // 分发fileName在vuex中修改
         this.setFileName(books.join('/')).then(() => {
-          const url = process.env.VUE_APP_RES_URL + '/epub/' + this.fileName + '.epub'
+          const url = process.env.VUE_APP_EPUB_URL + '/' + this.fileName + '.epub'
           this.initEpub(url)
         })
         console.log('网络上获取书籍')
