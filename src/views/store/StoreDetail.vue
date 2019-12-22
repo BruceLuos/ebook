@@ -127,10 +127,10 @@
         return this.metadata ? this.metadata.creator : ''
       },
       inBookShelf() {
-        if (this.bookItem && this.bookShelf) {
+        if (this.bookItem && this.shelfList) {
           const flatShelf = (function flatten(arr) {
             return [].concat(...arr.map(v => v.itemList ? [v, ...flatten(v.itemList)] : v))
-          })(this.bookShelf).filter(item => item.type === 1)
+          })(this.shelfList).filter(item => item.type === 1)
           const book = flatShelf.filter(item => item.fileName === this.bookItem.fileName)
           return book && book.length > 0
         } else {

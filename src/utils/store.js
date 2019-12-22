@@ -1,6 +1,8 @@
 import { getLocalStorage, getBookShelf, saveBookShelf } from './localstorage'
 
+// 加入书架
 export function addToShelf (book) {
+  // 缓存中获取书架列表数据
   let shelfList = getBookShelf()
   shelfList = removeAddFromShelf(shelfList)
   book.type = 1
@@ -11,8 +13,10 @@ export function addToShelf (book) {
 }
 // 移出书架
 export function removeFromBookShelf (book) {
+  // 从缓存中获取书架书籍
   return getBookShelf().filter(item => {
     if (item.itemList) {
+      // 获取除了添加图案的列表数据
       item.itemList = removeAddFromShelf(item.itemList)
     }
     return item.fileName !== book.fileName
