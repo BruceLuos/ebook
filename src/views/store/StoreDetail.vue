@@ -308,6 +308,10 @@
     },
     mounted() {
       this.init()
+      // 当刷新后页面没有shelfList数据从缓存中获取
+      if(!this.shelfList || this.shelfList.length === 0) {
+        this.getShelfList()
+      }
     }
   }
 </script>

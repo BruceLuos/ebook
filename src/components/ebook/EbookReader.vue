@@ -298,11 +298,15 @@ export default {
             this.navigation.forEach(nav => {
               if (nav.href) {
                 const href = nav.href.match(/^(.*)\.html$/)
-                // console.log(href)
-                // 根据locations和navigation中过滤数据中相同名字的数据加入pagelist
-                if (href === loc) {
-                  nav.pagelist.push(item)
+                // 因为href的结尾有可能是xhtml所以需要进行判断选出html结尾的href
+                if(href) {
+                    // console.log(href)
+                  // 根据locations和navigation中过滤数据中相同名字的数据加入pagelist
+                  if (href[1] === loc) {
+                    nav.pagelist.push(item)
+                  }
                 }
+
               }
             })
             let currentPage = 1
