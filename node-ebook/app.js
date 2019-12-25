@@ -1,10 +1,18 @@
+/* eslint-disable no-multiple-empty-lines */
 /* eslint-disable handle-callback-err */
 /* eslint-disable no-trailing-spaces */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 /* eslint-disable new-cap */
 const express = require('express')
+const mysql = require('mysql')
+const constant = require('./const')
+const cors = require('cors')
+
 const app = new express()
+
+// 解决跨域
+app.use(cors())
 
 // 连接数据库
 function connect () {
@@ -17,12 +25,13 @@ function connect () {
 }
 
 
-// 随机生成n个在l范围内的数据
+// 随机生成n个在l范围内的数字
 function randomArray (n, l) {
   let rnd = []
   for (let i = 0; i < n; i++) {
     rnd.push(Math.floor(Math.random() * l))
   }
+  // console.log('hh+', rnd)
   return rnd
 }
 
@@ -44,15 +53,18 @@ function createGuessYouLike (data) {
   return data
 }
 
+// 模拟推荐阅读人数
 function createRecommendData (data) {
   data['readers'] = Math.floor(data.id / 2 * randomArray(1, 100))
   return data
 }
 
+// 创建数据
 function createData (results, key) {
   return handleData(results[key])
 }
 
+// 处理数据
 function handleData (data) {
   if (!data.cover.startsWith('http://')) {
     data['cover'] = `${constant.resUrl}/img${data.cover}`
@@ -64,11 +76,13 @@ function handleData (data) {
   return data
 }
 
+// 分类id
 function createCategoryIds (n) {
   const arr = []
   constant.category.forEach((item, index) => {
     arr.push(index + 1)
   })
+  console.log(arr)
   const result = []
   for (let i = 0; i < n; i++) {
     // 获取的随机数不能重复
@@ -78,22 +92,26 @@ function createCategoryIds (n) {
     // 将已经获取的随机数取代，用最后一位数
     arr[ran] = arr[arr.length - i - 1]
   }
+  console.log(result)
   return result
 }
-
+// 分类数据
 function createCategoryData (data) {
   const categoryIds = createCategoryIds(6)
   const result = []
   categoryIds.forEach(categoryId => {
+    // 获取符合categoryId的数据
     const subList = data.filter(item => item.category === categoryId).slice(0, 4)
     subList.map(item => {
       return handleData(item)
     })
+    console.log(subList)
     result.push({
       category: categoryId,
       list: subList
     })
   })
+  // 只返回书籍数量为4的图书列表
   return result.filter(item => item.list.length === 4)
 }
 
@@ -104,12 +122,14 @@ app.get('/book/home', (req, res) => {
   const conn = connect()
   // 查询cover不为空的数据
   conn.query('select * from book where cover !=\'\'', (err, results) => {
+    // 数据长度
     const length = results.length
       const guessYouLike = []
       const banner = constant.resUrl + '/home_banner2.jpg'
       const recommend = []
       const featured = []
       const random = []
+      // 创建分类列表
       const categoryList = createCategoryData(results)
       const categories = [
         {
@@ -245,12 +265,15 @@ app.get('/book/home', (req, res) => {
           img2: constant.resUrl + '/cover/sta/2013_Book_ShipAndOffshoreStructureDesign.jpeg'
         }
       ]
+      // 随机生成猜你喜欢数据
       randomArray(9, length).forEach(key => {
         guessYouLike.push(createGuessYouLike(createData(results, key)))
+        // console.log(guessYouLike)
       })
       randomArray(3, length).forEach(key => {
         recommend.push(createRecommendData(createData(results, key)))
       })
+      // 精选数据
       randomArray(6, length).forEach(key => {
         featured.push(createData(results, key))
       })
@@ -282,7 +305,7 @@ app.get('/book/list', (req, res) => {
         } else {
             res.json({
                 error_code: 0,
-                data: results
+                data: result
             })
         }
         conn.end()
