@@ -90,6 +90,7 @@
   global.ePub = Epub
 
   export default {
+    mixins: [storeShelfMixin],
     components: {
       DetailTitle,
       Scroll,
@@ -226,15 +227,18 @@
         // opf包含书籍的html
         const opf = `${process.env.VUE_APP_EPUB_URL}/${this.bookItem.categoryText}/${this.bookItem.fileName}/OEBPS/package.opf`
         this.parseBook(opf)
+        console.log('下载书籍')
       },
       // 解析书籍
       parseBook(url) {
         this.book = new Epub(url)
         this.book.loaded.metadata.then(metadata => {
           this.metadata = metadata
+          console.log(this.metadata)
         })
         this.book.loaded.navigation.then(nav => {
           this.navigation = nav
+          console.log(this.navigation)
           if (this.navigation.toc && this.navigation.toc.length > 1) {
             const candisplay = this.display(this.navigation.toc[1].href)
             if (candisplay) {
@@ -259,6 +263,7 @@
           detail({
             fileName: this.fileName
           }).then(response => {
+            console.log('hh')
             if (response.status === 200 && response.data.error_code === 0 && response.data.data) {
               const data = response.data.data
               // booitem为请求回来的数据对象
@@ -272,6 +277,7 @@
               }
               // 拼接opf
               this.opf = `${process.env.VUE_APP_EPUB_OPF_URL}/${this.fileName}/${rootFile}`
+              console.log(this.opf)
               this.parseBook(this.opf)
             } else {
               this.showToast(response.data.msg)
@@ -359,7 +365,7 @@
               color: #333;
             }
           }
-          #preview {
+          #preview{
           }
           .book-detail-content-item-wrapper {
             .book-detail-content-item {

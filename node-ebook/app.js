@@ -82,7 +82,7 @@ function createCategoryIds (n) {
   constant.category.forEach((item, index) => {
     arr.push(index + 1)
   })
-  console.log(arr)
+  // console.log(arr)
   const result = []
   for (let i = 0; i < n; i++) {
     // 获取的随机数不能重复
@@ -92,7 +92,7 @@ function createCategoryIds (n) {
     // 将已经获取的随机数取代，用最后一位数
     arr[ran] = arr[arr.length - i - 1]
   }
-  console.log(result)
+  // console.log(result)
   return result
 }
 // 分类数据
@@ -105,7 +105,7 @@ function createCategoryData (data) {
     subList.map(item => {
       return handleData(item)
     })
-    console.log(subList)
+    // console.log(subList)
     result.push({
       category: categoryId,
       list: subList
@@ -293,23 +293,93 @@ app.get('/book/home', (req, res) => {
   })
 })
 
-// 书架列表
+// 书籍详情接口
+app.get('/book/detail', (req, res) => {
+  const conn = connect()
+  const fileName = req.query.fileName
+  const sql = `select * from book where fileName='${fileName}'`
+  console.log(sql)
+  conn.query(sql, (err, results) => {
+    if (err) {
+      res.json({
+        error_code: 1,
+        msg: '电子书详情获取失败'
+      })
+    } else {
+      if (results && results.length === 0) {
+        res.json({
+          error_code: 1,
+          msg: '电子书详情获取失败'
+        })
+      } else {
+        const book = handleData(results[0])
+        res.json({
+          error_code: 0,
+          msg: '获取成功',
+          data: book
+        })
+      }
+    }
+    conn.end()
+  })
+})
+
+// 首页书籍列表
 app.get('/book/list', (req, res) => {
-    const conn = connect()
-    conn.query('select * from book', (err, result) => {
-        if (err) {
-            res.json({
-                error_code: 1,
-                msg: '数据库获取数据失败'
-            })
-        } else {
-            res.json({
-                error_code: 0,
-                data: result
-            })
-        }
-        conn.end()
+  const conn = connect()
+  conn.query('select * from book where cover!=\'\'',
+    (err, results) => {
+      if (err) {
+        res.json({
+          error_code: 1,
+          msg: '获取失败'
+        })
+      } else {
+        results.map(item => handleData(item))
+        const data = {}
+        // 过滤掉不是该分类的数据
+        constant.category.forEach(categoryText => {
+          data[categoryText] = results.filter(item => item.categoryText === categoryText)
+        })
+        res.json({
+          error_code: 0,
+          msg: '书籍列表获取成功',
+          data: data,
+          total: results.length
+        })
+      }
+      conn.end()
     })
+})
+
+// 首页搜索书籍列表
+app.get('/book/flat-list', (req, res) => {
+  const conn = connect()
+  conn.query('select * from book where cover!=\'\'',
+    (err, results) => {
+      if (err) {
+        res.json({
+          error_code: 1,
+          msg: '获取失败'
+        })
+      } else {
+        results.map(item => handleData(item))
+        res.json({
+          error_code: 0,
+          msg: '获取成功',
+          data: results,
+          total: results.length
+        })
+      }
+      conn.end()
+    })
+})
+
+// 书架列表
+app.get('/book/shelf', (req, res) => {
+  res.json({
+    bookList: []
+  })
 })
 
 const server = app.listen(3000, () => {
