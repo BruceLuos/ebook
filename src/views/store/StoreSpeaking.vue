@@ -291,18 +291,19 @@
         })
         // 查看是否存在chapter
         if (this.chapter) {
-          console.log(this.rendition)
+          // console.log(this.rendition)
           this.section = this.book.spine.get(this.chapter.href)
           this.rendition.display(this.section.href).then(section => {
             const currentPage = this.rendition.currentLocation()
             const cfibase = section.cfiBase
             const cfistart = currentPage.start.cfi.replace(/.*!/, '').replace(/\)/, '')
+            // console.log(currentPage)
             const cfiend = currentPage.end.cfi.replace(/.*!/, '').replace(/\)/, '')
             this.currentSectionIndex = currentPage.start.displayed.page
             this.currentSectionTotal = currentPage.start.displayed.total
             // 获取书籍文本
             const cfi = `epubcfi(${cfibase}!,${cfistart},${cfiend})`
-            // console.log(currentPage, cfi, cfibase, cfistart, cfiend)
+            console.log(currentPage, cfi, cfibase, cfistart, cfiend)
             this.book.getRange(cfi).then(range => {
               // 获取文本
               let text = range.toLocaleString()

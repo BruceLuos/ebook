@@ -8,6 +8,7 @@ const express = require('express')
 const mysql = require('mysql')
 const constant = require('./const')
 const cors = require('cors')
+const voice = require('./voice')
 
 const app = new express()
 
@@ -380,6 +381,11 @@ app.get('/book/shelf', (req, res) => {
   res.json({
     bookList: []
   })
+})
+
+// 听书接口
+app.get('/voice', (req, res) => {
+  voice(req, res)
 })
 
 const server = app.listen(3000, () => {
