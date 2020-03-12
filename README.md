@@ -15,7 +15,7 @@ vue仿微信阅读web app
 
 #### 使用说明
 
-1.  打开nginx服务器，打开项目cnpm run serve,打开xampp运行mysql数据库，打开mysql-font进行连接数据库
+1.  打开nginx服务器，打开项目npm run serve,打开xampp运行mysql数据库，打开mysql-font进行连接数据库,也需要在项目的node-book中打开node app
 2.  如果连接网络发生变化需要在项目的env.development中调整url地址，也需要在node的const中修改url地址
 3.  xxxx
 
