@@ -19,6 +19,15 @@ vue仿微信阅读web app
 2.  如果连接网络发生变化需要在项目的env.development中调整url地址，也需要在node的const中修改url地址
 3.  xxxx
 
+![Image text](https://gitee.com/BruceLluo/img-folder/raw/master/%E4%B9%A6%E5%9F%8E%E9%A6%96%E9%A1%B5.png)
+
+![Image text](https://gitee.com/BruceLluo/img-folder/raw/master/%E4%B9%A6%E7%B1%8D%E8%AF%A6%E6%83%85%E5%8A%A0%E8%BD%BD.png)
+
+![Image text](https://gitee.com/BruceLluo/img-folder/raw/master/%E4%B9%A6%E7%B1%8D%E7%AE%80%E4%BB%8B.png)
+
+![Image text](https://gitee.com/BruceLluo/img-folder/raw/master/%E4%B9%A6%E6%9E%B6.png)
+
+
 #### 参与贡献
 
 1.  Fork 本仓库
